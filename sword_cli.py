@@ -355,7 +355,8 @@ def run_retrieval_eval(use_grounding_probes: bool = False) -> None:
     path = _prompt("Path to docs directory", ".")
     glob = _prompt("Glob pattern", "**/*.txt")
     top_k = _prompt("top_k", "4")
-    min_recall = _prompt("Min keyword recall (0.0-1.0)", "0.5")
+    min_retrieval_recall = _prompt("Min retrieval recall (0.0-1.0)", "0.5")
+    min_keyword_recall = _prompt("Min keyword recall (0.0-1.0)", "0.5")
 
     command = [
         project_python(),
@@ -365,8 +366,10 @@ def run_retrieval_eval(use_grounding_probes: bool = False) -> None:
         f"--glob={glob}",
         "--top-k",
         top_k,
-        "--min-recall",
-        min_recall,
+        "--min-retrieval-recall",
+        min_retrieval_recall,
+        "--min-keyword-recall",
+        min_keyword_recall,
     ]
 
     if use_grounding_probes:

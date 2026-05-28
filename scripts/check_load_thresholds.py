@@ -29,7 +29,7 @@ def load_latest_payload(results_dir: Path) -> tuple[Path, dict[str, Any]] | None
     if artifact is None:
         return None
 
-        payload = json.loads(artifact.read_text(encoding="utf-8-sig"))
+    payload = json.loads(artifact.read_text(encoding="utf-8-sig"))
     return artifact, payload
 
 
