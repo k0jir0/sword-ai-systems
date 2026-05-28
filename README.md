@@ -97,6 +97,7 @@ Expected validation results:
 
 - Tests complete with passing status.
 - `GET /health` returns status `ok`.
+- `GET /health/provider` reports provider configuration health.
 - `GET /metrics` returns Prometheus-style counters when `METRICS_ENABLED=true`.
 
 ## Production Controls
@@ -155,6 +156,12 @@ Optional regression gate (fails with non-zero exit when quality drops below thre
 python scripts/eval_retrieval.py --path . --glob "**/*.txt" --top-k 4 --min-retrieval-recall 0.7 --min-keyword-recall 0.7
 ```
 
+Baseline fixture check:
+
+```bash
+python scripts/eval_retrieval.py --path data/fixtures --glob "core_expectations.txt" --probe-file data/fixtures/retrieval_probes.txt --top-k 2 --min-retrieval-recall 1.0 --min-keyword-recall 1.0
+```
+
 5. Run tests:
 
 ```bash
@@ -187,6 +194,7 @@ pytest -q
 - Tune `RATE_LIMIT_PER_MINUTE` to enforce throttling policy.
 - Select provider with `RAG_LLM_PROVIDER` (`deterministic`, `ollama`, `openai`).
 - Verify observability via `X-Request-ID` response header and `/metrics` output.
+- Check provider readiness via `/health/provider` before load testing.
 
 ### Common Failures and Fixes
 

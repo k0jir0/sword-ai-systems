@@ -6,6 +6,12 @@ class HealthResponse(BaseModel):
     environment: str
 
 
+class ProviderHealthResponse(BaseModel):
+    provider: str
+    status: str
+    detail: str
+
+
 class IngestRequest(BaseModel):
     documents: list[str] = Field(default_factory=list)
 

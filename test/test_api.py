@@ -39,6 +39,24 @@ def test_health_endpoint_is_public() -> None:
     assert body["status"] == "ok"
 
 
+def test_provider_health_endpoint_ok_for_deterministic() -> None:
+    client = build_test_client(api_key="", rag_llm_provider="deterministic")
+    response = client.get("/health/provider")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["provider"] == "deterministic"
+    assert payload["status"] == "ok"
+
+
+def test_provider_health_endpoint_degraded_for_openai_without_key() -> None:
+    client = build_test_client(api_key="", rag_llm_provider="openai", openai_api_key="")
+    response = client.get("/health/provider")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["provider"] == "openai"
+    assert payload["status"] == "degraded"
+
+
 def test_ingest_requires_api_key_when_configured() -> None:
     client = build_test_client(api_key="secret")
     unauthorized = client.post("/rag/ingest", json={"documents": ["one"]})

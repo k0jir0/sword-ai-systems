@@ -77,3 +77,7 @@ flowchart TD
 - Add generation backends through `llm_clients.py` provider pattern.
 - Expand retrieval metrics in `scripts/eval_retrieval.py`.
 - Add domain datasets and adapters in the scripts layer.
+
+## Deployment Reference
+
+See `docs/deployment-topologies.md` for local, staging, and production deployment patterns.

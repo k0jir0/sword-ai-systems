@@ -1,0 +1,7 @@
+retrieval_baseline_version=1
+dataset=data/fixtures/core_expectations.txt
+probe_file=data/fixtures/retrieval_probes.txt
+top_k=2
+min_retrieval_recall=1.00
+min_keyword_recall=1.00
+last_validated_date=2026-05-28

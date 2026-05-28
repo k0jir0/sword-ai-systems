@@ -1,0 +1,4 @@
+# question|comma-separated expected keywords
+What are the core concepts covered?|deep learning,transformer,rag
+What production capability is expected?|production,deploy,api
+How is retrieval evaluated?|retrieval,recall,context

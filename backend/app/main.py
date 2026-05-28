@@ -4,14 +4,23 @@ import logging
 import time
 import uuid
 
+import httpx
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 
 from .config import Settings, settings
+from .llm_clients import build_llm_client
 from .observability import MetricsStore
 from .rag_pipeline import RAGPipeline
 from .security import SlidingWindowRateLimiter
-from .schemas import HealthResponse, IngestRequest, IngestResponse, QueryRequest, QueryResponse
+from .schemas import (
+    HealthResponse,
+    IngestRequest,
+    IngestResponse,
+    ProviderHealthResponse,
+    QueryRequest,
+    QueryResponse,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +89,28 @@ def create_app(
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:
         return HealthResponse(status="ok", environment=runtime_settings.app_env)
+
+    @app.get("/health/provider", response_model=ProviderHealthResponse)
+    def provider_health() -> ProviderHealthResponse:
+        provider = runtime_settings.rag_llm_provider
+        try:
+            _ = build_llm_client(runtime_settings)
+        except Exception as error:  # pylint: disable=broad-except
+            return ProviderHealthResponse(provider=provider, status="degraded", detail=str(error))
+
+        if provider == "ollama":
+            try:
+                with httpx.Client(timeout=max(2, runtime_settings.request_timeout_seconds // 2)) as client:
+                    response = client.get(f"{runtime_settings.ollama_base_url}/api/tags")
+                    response.raise_for_status()
+            except Exception as error:  # pylint: disable=broad-except
+                return ProviderHealthResponse(
+                    provider=provider,
+                    status="degraded",
+                    detail=f"Ollama connectivity check failed: {error}",
+                )
+
+        return ProviderHealthResponse(provider=provider, status="ok", detail="Provider configuration is valid")
 
     @app.get("/metrics", response_class=PlainTextResponse)
     def metrics_endpoint() -> str:

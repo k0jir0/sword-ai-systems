@@ -33,6 +33,8 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Enhanced `scripts/eval_retrieval.py`:
   - retrieval recall and keyword recall metrics
   - probe-file support and miss diagnostics
+  - threshold gates for retrieval regression detection
+  - baseline fixture execution path
 
 ### Production Reliability
 
@@ -40,6 +42,7 @@ Major roadmap milestones were executed in code and documentation with validated 
   - query auth enforcement
   - metrics disabled behavior
   - empty ingest handling
+  - provider health endpoint behavior
 - Added provider validation tests in `test/test_llm_clients.py`:
   - deterministic provider default
   - OpenAI key requirement enforcement
@@ -52,26 +55,33 @@ Major roadmap milestones were executed in code and documentation with validated 
   - production operations guidance
   - common failure troubleshooting section
 - Added architecture documentation in `docs/architecture.md`.
+- Added deployment topology guidance in `docs/deployment-topologies.md`.
 - Added research extension plan in `docs/research-extensions.md`.
 - Added fixture corpus file: `data/fixtures/core_expectations.txt`.
+- Added retrieval probe and baseline files in `data/fixtures/`.
 
 ## Validation Evidence
 
-- Local test suite result: `10 passed in 14.75s`.
+- Local test suite result: `12 passed in 14.22s`.
 - Script smoke checks completed for:
   - MLP demo
   - ingestion with chunking
   - retrieval evaluation metrics output
+  - retrieval baseline threshold gate
 
 ## Current GitHub State
 
-- Progress commit pushed to `main`:
-  - Commit: `9c4aa6c`
-  - Message: "Execute roadmap milestones: reproducibility, RAG quality, docs"
+- Recent roadmap commits pushed to `main`:
+  - `9c4aa6c` Execute roadmap milestones: reproducibility, RAG quality, docs
+  - `89e67b7` Add completion report and operations troubleshooting docs
+  - `b07e9ff` Add retrieval quality gates and roadmap progress evidence
+
+- CI evidence:
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574505436
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574529888
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574596649
 
 ## Remaining Work for Full Completion
 
-- Add benchmarking baselines and thresholds for retrieval regression gating.
-- Add startup/provider health validation endpoint checks.
-- Expand architecture docs with deployment topology examples.
-- Capture final CI run URL and completion artifact links for sign-off.
+- Optional: add CI job to run retrieval baseline gate automatically (currently validated locally).
+- Optional: add load/stress harness for empirical rate-limit behavior under concurrency.

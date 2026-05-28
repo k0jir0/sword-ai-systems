@@ -20,15 +20,22 @@ Completed today:
 - Milestone 4 partial completion:
 	- `scripts/ingest_docs.py` now supports chunking (`chunk_size`, `chunk_overlap`) and chunk metadata.
 	- `scripts/eval_retrieval.py` now reports retrieval recall and keyword recall with miss diagnostics.
+	- Retrieval regression gates were added (`min_retrieval_recall`, `min_keyword_recall`).
+	- Baseline fixtures were added: `data/fixtures/core_expectations.txt`, `data/fixtures/retrieval_probes.txt`, `data/fixtures/retrieval_baseline.txt`.
 - Milestone 5 partial completion:
 	- API tests expanded for failure paths (query auth checks, metrics disabled, empty ingest).
+	- Provider health endpoint added: `/health/provider` with degraded status reporting for misconfigured providers.
 - Milestone 6 partial completion:
 	- Added `docs/architecture.md` and `docs/research-extensions.md`.
+	- Added `docs/deployment-topologies.md`.
+	- Added `docs/completion-report.md`.
 
 Evidence captured today:
-- Test run: `8 passed in 22.70s`.
+- Test run: `12 passed in 14.22s`.
 - MLP smoke run completed with reproducible metrics output.
 - Ingest/eval smoke run completed with retrieval and keyword recall summaries.
+- Retrieval baseline gate passed at recall targets on fixture corpus.
+- CI runs on latest roadmap commits are green.
 
 North-Star Completion Definition
 
