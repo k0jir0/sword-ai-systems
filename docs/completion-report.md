@@ -58,6 +58,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added architecture documentation in `docs/architecture.md`.
 - Added deployment topology guidance in `docs/deployment-topologies.md`.
 - Added release checklist and tag guidance in `docs/release-checklist.md`.
+- Added `scripts/run_completion_checks.py` for one-command sign-off checks.
 - Added research extension plan in `docs/research-extensions.md`.
 - Added fixture corpus file: `data/fixtures/core_expectations.txt`.
 - Added retrieval probe and baseline files in `data/fixtures/`.
@@ -77,6 +78,10 @@ Major roadmap milestones were executed in code and documentation with validated 
   - `9c4aa6c` Execute roadmap milestones: reproducibility, RAG quality, docs
   - `89e67b7` Add completion report and operations troubleshooting docs
   - `b07e9ff` Add retrieval quality gates and roadmap progress evidence
+  - `3cd88f9` Advance roadmap: provider health checks, baselines, sign-off updates
+  - `0a2fe11` Add CI retrieval baseline job and release checklist
+  - `8718a45` Add rate-limit load harness and roadmap evidence updates
+  - `5e13efb` Add automated roadmap completion checks script
 
 - CI evidence:
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574505436
