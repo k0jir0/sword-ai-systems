@@ -52,6 +52,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added latency percentile capture (`p50`, `p95`) in load-test artifacts for performance trend analysis.
 - Added `scripts/check_load_thresholds.py` to enforce p95/throttled-rate bounds on latest artifact.
 - Added markdown dashboard rendering to `scripts/summarize_load_tests.py` for artifact-backed reliability status.
+- Included `scripts` in the editable package set so CI can import load-tool modules during test collection.
 
 ### Documentation and Architecture
 
