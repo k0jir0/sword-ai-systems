@@ -1,5 +1,34 @@
 # Sword AI Systems Tech Stack
 
+## About
+
+Sword is a learning-first AI systems project that connects theory and production in one codebase. It is designed to help learners move from core deep learning concepts to deployable, observable, and secure AI services.
+
+The project combines a modern RAG application stack with practical ML training workflows. You can study model fundamentals, run retrieval experiments, and expose everything through a production-style API surface that includes authentication, rate limiting, and metrics.
+
+### Purpose
+
+- Bridge the gap between AI theory and software delivery.
+- Provide a practical reference architecture for end-to-end AI systems.
+- Make experimentation reproducible with test coverage and CI.
+
+### Tech Stack Summary
+
+- API and serving: FastAPI, Uvicorn
+- Configuration: Pydantic Settings, .env
+- Retrieval and vector store: SentenceTransformers, ChromaDB
+- Generation backends: deterministic mode, Ollama, OpenAI
+- ML workflows: PyTorch, scikit-learn, Hugging Face Transformers and Datasets
+- Operations and quality: pytest, GitHub Actions CI, Prometheus-style metrics
+
+### Learning Intentions
+
+- Understand neural network and optimization fundamentals through runnable scripts.
+- Learn transformer-based NLP workflows and model adaptation patterns.
+- Build and evaluate Retrieval-Augmented Generation pipelines.
+- Practice production concerns such as API contracts, security controls, throttling, and observability.
+- Develop confidence shipping AI systems with repeatable tests and deployment-ready structure.
+
 This project bootstraps a practical stack for the learning goals in `index.txt`:
 
 - Neural network and deep learning fundamentals
