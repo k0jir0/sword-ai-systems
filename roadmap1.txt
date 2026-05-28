@@ -36,6 +36,7 @@ Completed today:
 	- CI now includes a retrieval-baseline gate job using fixture probes.
 	- Added `scripts/run_completion_checks.py` for one-command sign-off validation.
 	- Added `docs/load-testing.md` with artifact-driven reliability workflow.
+	- Added scheduled CI workflow `.github/workflows/load-trend-report.yml` for load trend summaries.
 
 Evidence captured today:
 - Test run: `12 passed in 14.22s`.

@@ -34,3 +34,14 @@ This prints a compact history of recent run metrics so you can compare reliabili
 2. Run the same probe after changes.
 3. Compare `success_rate`, `throttled_rate`, and `status_counts` across artifacts.
 4. Attach artifact paths to completion evidence in `docs/completion-report.md`.
+
+## Scheduled Trend Reporting
+
+A scheduled workflow generates a trend summary artifact weekly and on-demand:
+
+- Workflow file: `.github/workflows/load-trend-report.yml`
+- Trigger options:
+	- `workflow_dispatch` for manual runs
+	- weekly cron schedule
+- Output artifact:
+	- `load-trend-summary` (contains summary text from recent persisted load runs)

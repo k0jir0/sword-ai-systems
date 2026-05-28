@@ -65,6 +65,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added research extension plan in `docs/research-extensions.md`.
 - Added fixture corpus file: `data/fixtures/core_expectations.txt`.
 - Added retrieval probe and baseline files in `data/fixtures/`.
+- Added scheduled load trend reporting workflow: `.github/workflows/load-trend-report.yml`.
 
 ## Validation Evidence
 
@@ -101,4 +102,4 @@ Major roadmap milestones were executed in code and documentation with validated 
 ## Remaining Work for Full Completion
 
 - Optional: add load/stress harness for empirical rate-limit behavior under concurrency.
-- Optional: integrate load-test trend summaries into scheduled CI reporting.
+- Optional: persist richer percentiles (p50/p95 latency) in load-test artifacts.

@@ -1,0 +1,28 @@
+name: load-trend-report
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * 1"
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate load trend summary
+        run: |
+          python scripts/summarize_load_tests.py --results-dir data/load-testing-results --limit 20 > load_trend_summary.txt
+
+      - name: Upload summary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-trend-summary
+          path: load_trend_summary.txt
