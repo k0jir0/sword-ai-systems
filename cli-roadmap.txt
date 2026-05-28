@@ -1,0 +1,117 @@
+Sword CLI Roadmap
+Date: 2026-05-28
+
+Overview
+This roadmap defines the full operational design for sword_cli.py.
+The goal is a self-contained interactive command centre that exposes every
+Sword capability without requiring the user to know any script paths,
+argument names, or REST calls.
+
+Architecture
+The CLI is organised into five functional sections, each with a dedicated
+sub-menu of numbered actions.  A top-level main menu routes between sections.
+All subprocess actions use the project virtual-env interpreter discovered at
+runtime.  All HTTP actions use a shared request helper with retry logic and
+clear error output.
+
+Section Definitions
+
+  [1] SERVER
+      Manage the lifecycle of the Sword API process.
+
+      1-1  Start API server
+           Spawns Uvicorn, waits for /health readiness, reports log path.
+
+      1-2  Stop API server
+           Gracefully terminates the running process.
+
+      1-3  Restart API server
+           Stop + Start in one action.
+
+      1-4  API status
+           Reports whether process is alive and /health response.
+
+      1-5  View server logs
+           Tails the last N lines of logs/api-server.log.
+
+  [2] RAG
+      Ingest documents and query the retrieval-augmented generation pipeline.
+
+      2-1  Ingest documents via script
+           Prompts for path, glob, chunk-size, chunk-overlap; runs
+           scripts/ingest_docs.py.
+
+      2-2  Ingest documents via API
+           Prompts for one or more documents; sends POST /rag/ingest with
+           optional x-api-key.
+
+      2-3  Query
+           Prompts for question and top_k; sends POST /rag/query; prints
+           answer, contexts, and provider.
+
+      2-4  Run retrieval evaluation
+           Prompts for path, glob, probe-file, top-k, and recall thresholds;
+           runs scripts/eval_retrieval.py with given options.
+
+      2-5  Run retrieval evaluation (labeled grounding probes)
+           Runs eval_retrieval.py against data/fixtures/grounding_probes.txt
+           with grounding recall gate enabled.
+
+  [3] LEARNING SCRIPTS
+      Run the educational ML demonstration scripts.
+
+      3-1  MLP fundamentals demo
+           Prompts for seed, epochs, batch-size, learning-rate; runs
+           scripts/train_mlp_demo.py.
+
+      3-2  Transformer NLP demo
+           Prompts for model-name, epochs, max-samples; runs
+           scripts/train_transformer_demo.py.
+
+  [4] RELIABILITY
+      Validate system quality and performance characteristics.
+
+      4-1  Run test suite
+           Runs pytest -q; streams output to terminal.
+
+      4-2  Run completion checks
+           Runs scripts/run_completion_checks.py; reports pass/fail.
+
+      4-3  Run load test
+           Prompts for requests, concurrency, label; runs
+           scripts/load_test_rate_limit.py; requires API to be running.
+
+      4-4  View load test summary
+           Runs scripts/summarize_load_tests.py; shows dashboard of recent
+           load test artifacts.
+
+      4-5  Check load thresholds
+           Runs scripts/check_load_thresholds.py against latest artifact.
+
+  [5] CONFIGURATION
+      Inspect and manage project configuration.
+
+      5-1  Show current settings
+           Reads .env and prints all key/value pairs (masks secrets).
+
+      5-2  Show metrics
+           Calls GET /metrics and prints Prometheus-style counters.
+
+      5-3  Show API log tail
+           Same as 1-5; accessible from config section for convenience.
+
+  [0] EXIT
+      Stops API server if running, then exits.
+
+Implementation Plan
+
+  Step 1: Rewrite sword_cli.py with sectioned main menu and sub-menus.
+  Step 2: Implement every section and sub-menu function listed above.
+  Step 3: Verify each function runs without error using scripted input.
+  Step 4: Commit and push.
+
+Completion Criteria
+  - All 18 numbered actions are reachable from the CLI.
+  - No server log output bleeds into the interactive prompt.
+  - Graceful error messages when API is not running.
+  - Works when launched with plain `python sword_cli.py`.
