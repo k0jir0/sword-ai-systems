@@ -195,6 +195,7 @@ pytest -q
 - Select provider with `RAG_LLM_PROVIDER` (`deterministic`, `ollama`, `openai`).
 - Verify observability via `X-Request-ID` response header and `/metrics` output.
 - Check provider readiness via `/health/provider` before load testing.
+- Follow `docs/release-checklist.md` before tagging a release.
 
 ### Common Failures and Fixes
 

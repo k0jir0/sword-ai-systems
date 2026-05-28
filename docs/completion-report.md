@@ -56,6 +56,7 @@ Major roadmap milestones were executed in code and documentation with validated 
   - common failure troubleshooting section
 - Added architecture documentation in `docs/architecture.md`.
 - Added deployment topology guidance in `docs/deployment-topologies.md`.
+- Added release checklist and tag guidance in `docs/release-checklist.md`.
 - Added research extension plan in `docs/research-extensions.md`.
 - Added fixture corpus file: `data/fixtures/core_expectations.txt`.
 - Added retrieval probe and baseline files in `data/fixtures/`.
@@ -81,7 +82,9 @@ Major roadmap milestones were executed in code and documentation with validated 
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574529888
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574596649
 
+- Workflow enhancement:
+  - CI now includes a `retrieval-baseline` job that executes fixture-based quality gates.
+
 ## Remaining Work for Full Completion
 
-- Optional: add CI job to run retrieval baseline gate automatically (currently validated locally).
 - Optional: add load/stress harness for empirical rate-limit behavior under concurrency.
