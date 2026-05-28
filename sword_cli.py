@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -10,6 +11,28 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_BASE_URL = "http://127.0.0.1:8080"
+VENV_CANDIDATE_DIRS = [
+    ROOT,
+    ROOT.parent,
+    ROOT.parent.parent,
+]
+
+
+def find_venv_python() -> Path | None:
+    for base_dir in VENV_CANDIDATE_DIRS:
+        candidate = base_dir / ".venv" / "Scripts" / "python.exe"
+        if candidate.exists():
+            return candidate
+    return None
+
+
+VENV_PYTHON = find_venv_python()
+
+
+def project_python() -> str:
+    if VENV_PYTHON is not None:
+        return str(VENV_PYTHON)
+    return sys.executable
 
 
 def run_command(command: list[str]) -> int:
@@ -34,13 +57,26 @@ def get_json(url: str) -> dict:
         return json.loads(response.read().decode("utf-8"))
 
 
+def wait_for_api(base_url: str, timeout_seconds: float = 20.0) -> bool:
+    deadline = time.time() + timeout_seconds
+    while time.time() < deadline:
+        try:
+            payload = get_json(f"{base_url}/health")
+            if payload.get("status") == "ok":
+                return True
+        except urllib.error.URLError:
+            pass
+        time.sleep(0.5)
+    return False
+
+
 def start_api(api_process: subprocess.Popen[str] | None) -> subprocess.Popen[str] | None:
     if api_process and api_process.poll() is None:
         print("API server is already running.")
         return api_process
 
     command = [
-        sys.executable,
+        project_python(),
         "-m",
         "uvicorn",
         "backend.app.main:app",
@@ -50,7 +86,15 @@ def start_api(api_process: subprocess.Popen[str] | None) -> subprocess.Popen[str
         "8080",
     ]
     process = subprocess.Popen(command, cwd=ROOT)  # noqa: S603
-    print("Started API server at http://127.0.0.1:8080")
+    time.sleep(1.0)
+    if process.poll() is not None:
+        print("API server failed to start. Check dependency installation and environment.")
+        return None
+
+    if wait_for_api(DEFAULT_BASE_URL, timeout_seconds=20.0):
+        print("Started API server at http://127.0.0.1:8080")
+    else:
+        print("API process started but is not healthy yet; it may still be initializing.")
     return process
 
 
@@ -69,11 +113,17 @@ def stop_api(api_process: subprocess.Popen[str] | None) -> subprocess.Popen[str]
 
 
 def check_health(base_url: str) -> None:
-    try:
-        payload = get_json(f"{base_url}/health")
-        print(json.dumps(payload, indent=2))
-    except urllib.error.URLError as error:
-        print(f"Health request failed: {error}")
+    last_error: urllib.error.URLError | None = None
+    for _ in range(3):
+        try:
+            payload = get_json(f"{base_url}/health")
+            print(json.dumps(payload, indent=2))
+            return
+        except urllib.error.URLError as error:
+            last_error = error
+            time.sleep(0.5)
+
+    print(f"Health request failed: {last_error}")
 
 
 def check_provider_health(base_url: str) -> None:
@@ -91,7 +141,7 @@ def ingest_docs() -> None:
     chunk_overlap = input("Chunk overlap (default=120): ").strip() or "120"
 
     command = [
-        sys.executable,
+        project_python(),
         "scripts/ingest_docs.py",
         "--path",
         path,
@@ -135,7 +185,7 @@ def query_rag(base_url: str) -> None:
 
 
 def run_completion_checks() -> None:
-    code = run_command([sys.executable, "scripts/run_completion_checks.py"])
+    code = run_command([project_python(), "scripts/run_completion_checks.py"])
     print(f"Completion checks finished with exit code {code}")
 
 
@@ -157,6 +207,9 @@ def main() -> None:
 
     print("Sword CLI: numbered access to common project actions.")
     print(f"Project root: {ROOT}")
+    print(f"Python interpreter for actions: {project_python()}")
+    if VENV_PYTHON is None:
+        print("Warning: .venv interpreter not found; falling back to current Python executable.")
 
     while True:
         print_menu()
