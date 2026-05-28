@@ -182,6 +182,19 @@ pytest -q
 - Select provider with `RAG_LLM_PROVIDER` (`deterministic`, `ollama`, `openai`).
 - Verify observability via `X-Request-ID` response header and `/metrics` output.
 
+### Common Failures and Fixes
+
+- `401 Invalid or missing API key`:
+  - Set `API_KEY` in `.env` and include matching `x-api-key` header on `/rag/*` routes.
+- `429 Rate limit exceeded`:
+  - Increase `RATE_LIMIT_PER_MINUTE` for local testing or slow request cadence.
+- `No indexed context found yet`:
+  - Run `scripts/ingest_docs.py` first to populate the vector store.
+- Provider misconfiguration (`openai`):
+  - Ensure `OPENAI_API_KEY` is set when `RAG_LLM_PROVIDER=openai`.
+- Slow first run on Windows:
+  - Initial embedding model download can take time; subsequent runs are faster from cache.
+
 ## Notes
 
 - The default RAG provider is deterministic for reproducibility.
