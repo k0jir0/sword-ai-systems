@@ -22,6 +22,7 @@ Completed today:
 	- `scripts/eval_retrieval.py` now reports retrieval recall and keyword recall with miss diagnostics.
 	- Retrieval regression gates were added (`min_retrieval_recall`, `min_keyword_recall`).
 	- Baseline fixtures were added: `data/fixtures/core_expectations.txt`, `data/fixtures/retrieval_probes.txt`, `data/fixtures/retrieval_baseline.txt`.
+	- Added labeled grounding probes in `data/fixtures/grounding_probes.txt` and grounding recall gates in `scripts/eval_retrieval.py`.
 - Milestone 5 partial completion:
 	- API tests expanded for failure paths (query auth checks, metrics disabled, empty ingest).
 	- Provider health endpoint added: `/health/provider` with degraded status reporting for misconfigured providers.

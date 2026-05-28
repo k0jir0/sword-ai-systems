@@ -35,6 +35,8 @@ Major roadmap milestones were executed in code and documentation with validated 
   - probe-file support and miss diagnostics
   - threshold gates for retrieval regression detection
   - baseline fixture execution path
+  - labeled grounding probes with answer-fragment recall
+- Added `data/fixtures/grounding_probes.txt` as a labeled grounding benchmark for deterministic evaluation.
 
 ### Production Reliability
 
@@ -69,6 +71,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added research extension plan in `docs/research-extensions.md`.
 - Added fixture corpus file: `data/fixtures/core_expectations.txt`.
 - Added retrieval probe and baseline files in `data/fixtures/`.
+- Added labeled grounding probes in `data/fixtures/`.
 - Added scheduled load trend reporting workflow: `.github/workflows/load-trend-report.yml`.
 
 ## Validation Evidence

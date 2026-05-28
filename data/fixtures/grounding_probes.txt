@@ -1,0 +1,4 @@
+# question|comma-separated expected keywords|comma-separated answer fragments
+What are the core concepts covered?|deep learning,transformer,rag|Neural networks and deep learning fundamentals
+What production capability is expected?|production,deploy,api|API deployment with authentication and rate limiting
+How is retrieval evaluated?|retrieval,recall,context|End-to-end ingestion and retrieval query flow

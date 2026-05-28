@@ -63,6 +63,7 @@ flowchart TD
 - Persistent vector store keeps retrieval state between runs.
 - API-level controls make the system production-oriented, not notebook-only.
 - Evaluation scripts and tests provide measurable quality and regression protection.
+- Labeled grounding probes in `scripts/eval_retrieval.py` turn retrieval checks into answer-fragment recall gates.
 
 ## Operational Interfaces
 
