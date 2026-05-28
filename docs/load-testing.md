@@ -31,6 +31,14 @@ This prints a compact history of recent run metrics so you can compare reliabili
 
 Artifact payloads include latency metrics (`avg`, `p50`, `p95`, `max` in ms), which makes run-to-run performance drift easier to detect.
 
+To render a markdown dashboard with threshold status for recent runs:
+
+```bash
+python scripts/summarize_load_tests.py --results-dir data/load-testing-results --limit 10 --format markdown --max-p95-ms 2000 --max-throttled-rate 1.0
+```
+
+This is useful when you want a quick artifact-backed status table for docs or CI evidence.
+
 ## Threshold Gate for Latest Artifact
 
 ```bash

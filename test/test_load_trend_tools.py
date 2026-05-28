@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from scripts.check_load_thresholds import latest_artifact
-from scripts.summarize_load_tests import format_payload_line, load_artifact_payloads
+from scripts.summarize_load_tests import format_payload_line, load_artifact_payloads, render_markdown_dashboard
 
 
 def test_load_artifact_payloads_reads_latest_first(tmp_path: Path) -> None:
@@ -44,3 +44,24 @@ def test_latest_artifact_returns_most_recent_file(tmp_path: Path) -> None:
 
     latest = latest_artifact(tmp_path)
     assert latest == expected
+
+
+def test_render_markdown_dashboard_includes_threshold_status() -> None:
+    dashboard = render_markdown_dashboard(
+        [
+            {
+                "timestamp_utc": "20260528T000000Z",
+                "label": "baseline",
+                "success_rate": 0.95,
+                "throttled_rate": 0.05,
+                "latency_ms": {"p95": 1500.0},
+                "_artifact_path": "data/load-testing-results/run.json",
+            }
+        ],
+        max_p95_ms=2000.0,
+        max_throttled_rate=0.1,
+    )
+
+    assert "# Load Test Dashboard" in dashboard
+    assert "| timestamp | label | success_rate | throttled_rate | p95_ms | thresholds | artifact |" in dashboard
+    assert "| 20260528T000000Z | baseline | 0.95 | 0.05 | 1500.00 | pass | data/load-testing-results/run.json |" in dashboard
