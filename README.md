@@ -149,6 +149,12 @@ python scripts/train_transformer_demo.py
 python scripts/eval_retrieval.py --path . --glob "**/*.txt" --top-k 4
 ```
 
+Optional regression gate (fails with non-zero exit when quality drops below threshold):
+
+```bash
+python scripts/eval_retrieval.py --path . --glob "**/*.txt" --top-k 4 --min-retrieval-recall 0.7 --min-keyword-recall 0.7
+```
+
 5. Run tests:
 
 ```bash

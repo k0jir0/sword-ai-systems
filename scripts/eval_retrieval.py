@@ -50,7 +50,14 @@ def keyword_hit(contexts: list[str], expected_keywords: list[str]) -> bool:
 
 
 @app.command()
-def run(path: str = ".", glob: str = "**/*.txt", top_k: int = 4, probe_file: str | None = None) -> None:
+def run(
+    path: str = ".",
+    glob: str = "**/*.txt",
+    top_k: int = 4,
+    probe_file: str | None = None,
+    min_retrieval_recall: float = 0.0,
+    min_keyword_recall: float = 0.0,
+) -> None:
     root = Path(path).resolve()
     files = [entry for entry in root.glob(glob) if entry.is_file()]
     docs = [entry.read_text(encoding="utf-8", errors="ignore") for entry in files]
@@ -97,6 +104,26 @@ def run(path: str = ".", glob: str = "**/*.txt", top_k: int = 4, probe_file: str
         console.print("missed_probes:", style="yellow")
         for missed in misses:
             console.print(f"- {missed}", style="yellow")
+
+    if retrieval_recall_at_k < min_retrieval_recall:
+        console.print(
+            (
+                f"retrieval recall gate failed: {retrieval_recall_at_k:.2f} "
+                f"< required {min_retrieval_recall:.2f}"
+            ),
+            style="red",
+        )
+        raise typer.Exit(code=1)
+
+    if keyword_recall_at_k < min_keyword_recall:
+        console.print(
+            (
+                f"keyword recall gate failed: {keyword_recall_at_k:.2f} "
+                f"< required {min_keyword_recall:.2f}"
+            ),
+            style="red",
+        )
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":
