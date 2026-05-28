@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import time
@@ -11,6 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_BASE_URL = "http://127.0.0.1:8080"
+LOGS_DIR = ROOT / "logs"
+API_LOG_FILE = LOGS_DIR / "api-server.log"
 VENV_CANDIDATE_DIRS = [
     ROOT,
     ROOT.parent,
@@ -85,16 +88,26 @@ def start_api(api_process: subprocess.Popen[str] | None) -> subprocess.Popen[str
         "--port",
         "8080",
     ]
-    process = subprocess.Popen(command, cwd=ROOT)  # noqa: S603
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
+    with API_LOG_FILE.open("a", encoding="utf-8") as log_file:
+        process = subprocess.Popen(  # noqa: S603
+            command,
+            cwd=ROOT,
+            stdin=subprocess.DEVNULL,
+            stdout=log_file,
+            stderr=subprocess.STDOUT,
+            creationflags=creation_flags,
+        )
     time.sleep(1.0)
     if process.poll() is not None:
-        print("API server failed to start. Check dependency installation and environment.")
+        print(f"API server failed to start. Check logs: {API_LOG_FILE}")
         return None
 
     if wait_for_api(DEFAULT_BASE_URL, timeout_seconds=20.0):
-        print("Started API server at http://127.0.0.1:8080")
+        print(f"Started and verified healthy at {DEFAULT_BASE_URL} (logs: {API_LOG_FILE})")
     else:
-        print("API process started but is not healthy yet; it may still be initializing.")
+        print(f"API process started but is not healthy yet. Check logs: {API_LOG_FILE}")
     return process
 
 
