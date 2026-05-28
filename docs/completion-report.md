@@ -105,6 +105,7 @@ Roadmap milestones are complete with passing local quality gates and a green CI 
   - `5e13efb` Add automated roadmap completion checks script
 
 - CI evidence:
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26586046705
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26585113108
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26584723039
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574505436
