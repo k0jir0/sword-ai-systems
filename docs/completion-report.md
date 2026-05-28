@@ -74,6 +74,10 @@ Major roadmap milestones were executed in code and documentation with validated 
   - ingestion with chunking
   - retrieval evaluation metrics output
   - retrieval baseline threshold gate
+- Completion check automation passed (`scripts/run_completion_checks.py`).
+- Docker path validated:
+  - `docker --version` and `docker compose version` available.
+  - `docker compose config` passes after compose modernization and resilient env-file fallback.
 
 ## Current GitHub State
 

@@ -43,6 +43,8 @@ Evidence captured today:
 - Ingest/eval smoke run completed with retrieval and keyword recall summaries.
 - Retrieval baseline gate passed at recall targets on fixture corpus.
 - CI runs on latest roadmap commits are green.
+- Unified completion-check script passed.
+- Docker compose config validates with modernized compose file and optional env fallback.
 
 North-Star Completion Definition
 
