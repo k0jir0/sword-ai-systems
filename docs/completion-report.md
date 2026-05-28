@@ -50,6 +50,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added timestamped load-test artifact output under `data/load-testing-results/`.
 - Added `scripts/summarize_load_tests.py` for trend summaries across runs.
 - Added latency percentile capture (`p50`, `p95`) in load-test artifacts for performance trend analysis.
+- Added `scripts/check_load_thresholds.py` to enforce p95/throttled-rate bounds on latest artifact.
 
 ### Documentation and Architecture
 
@@ -103,4 +104,4 @@ Major roadmap milestones were executed in code and documentation with validated 
 ## Remaining Work for Full Completion
 
 - Optional: add load/stress harness for empirical rate-limit behavior under concurrency.
-- Optional: add automated regression thresholds for latency percentiles.
+- Optional: feed load-threshold outcomes into a dedicated quality dashboard.

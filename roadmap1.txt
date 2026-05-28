@@ -29,6 +29,7 @@ Completed today:
 	- Load-test harness now writes timestamped JSON artifacts for trend analysis.
 	- Added `scripts/summarize_load_tests.py` to compare recent reliability runs.
 	- Load-test artifacts now include latency percentile metrics (`p50`, `p95`).
+	- Added `scripts/check_load_thresholds.py` for artifact-based p95/throttled-rate gating.
 - Milestone 6 partial completion:
 	- Added `docs/architecture.md` and `docs/research-extensions.md`.
 	- Added `docs/deployment-topologies.md`.

@@ -31,6 +31,14 @@ This prints a compact history of recent run metrics so you can compare reliabili
 
 Artifact payloads include latency metrics (`avg`, `p50`, `p95`, `max` in ms), which makes run-to-run performance drift easier to detect.
 
+## Threshold Gate for Latest Artifact
+
+```bash
+python scripts/check_load_thresholds.py --results-dir data/load-testing-results --max-p95-ms 2000 --max-throttled-rate 1.0 --allow-missing
+```
+
+Use this to enforce reliability bounds against the most recent persisted load run.
+
 ## Suggested Practice
 
 1. Run one baseline probe before changing rate-limit logic.

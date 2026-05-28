@@ -31,6 +31,7 @@ Use this checklist before tagging a Sword release.
 - [ ] Metrics endpoint returns expected counters.
 - [ ] Load-test artifact generated in `data/load-testing-results/`.
 - [ ] Recent load-test trends reviewed with `scripts/summarize_load_tests.py`.
+- [ ] Latest load artifact passes thresholds with `scripts/check_load_thresholds.py`.
 
 ## 5. Versioning and Tagging Guidance
 

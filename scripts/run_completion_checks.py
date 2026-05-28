@@ -20,6 +20,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--top-k", type=int, default=2)
     parser.add_argument("--min-retrieval-recall", type=float, default=1.0)
     parser.add_argument("--min-keyword-recall", type=float, default=1.0)
+    parser.add_argument("--check-load-thresholds", action="store_true")
+    parser.add_argument("--max-p95-ms", type=float, default=2000.0)
+    parser.add_argument("--max-throttled-rate", type=float, default=1.0)
     return parser.parse_args()
 
 
@@ -49,6 +52,22 @@ def main() -> None:
         repo_root,
         "Retrieval Baseline Gate",
     )
+
+    if args.check_load_thresholds:
+        run_step(
+            [
+                args.python,
+                "scripts/check_load_thresholds.py",
+                "--results-dir",
+                "data/load-testing-results",
+                "--max-p95-ms",
+                str(args.max_p95_ms),
+                "--max-throttled-rate",
+                str(args.max_throttled_rate),
+            ],
+            repo_root,
+            "Load Threshold Gate",
+        )
 
     print("\nAll completion checks passed.")
 

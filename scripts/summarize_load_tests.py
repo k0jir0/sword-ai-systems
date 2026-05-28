@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 
 def parse_args() -> argparse.Namespace:
@@ -10,6 +11,35 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--results-dir", default="data/load-testing-results")
     parser.add_argument("--limit", type=int, default=10, help="Number of most recent runs to display")
     return parser.parse_args()
+
+
+def load_artifact_payloads(results_dir: Path, limit: int) -> list[dict[str, Any]]:
+    files = sorted(results_dir.glob("load_test_*.json"), reverse=True)
+    selected = files[: max(1, limit)]
+
+    payloads: list[dict[str, Any]] = []
+    for artifact in selected:
+        payload = json.loads(artifact.read_text(encoding="utf-8"))
+        payload["_artifact_path"] = artifact.as_posix()
+        payloads.append(payload)
+
+    return payloads
+
+
+def format_payload_line(payload: dict[str, Any]) -> str:
+    status_counts = payload.get("status_counts", {})
+    return " | ".join(
+        [
+            f"timestamp={payload.get('timestamp_utc', 'unknown')}",
+            f"label={payload.get('label', '')}",
+            f"requests={payload.get('requests', 0)}",
+            f"concurrency={payload.get('concurrency', 0)}",
+            f"success_rate={payload.get('success_rate', 0):.2f}",
+            f"throttled_rate={payload.get('throttled_rate', 0):.2f}",
+            f"status_counts={status_counts}",
+            f"artifact={payload.get('_artifact_path', '')}",
+        ]
+    )
 
 
 def main() -> None:
@@ -24,27 +54,12 @@ def main() -> None:
         print(f"No load test artifacts found in: {results_dir}")
         return
 
-    selected = files[: max(1, args.limit)]
+    payloads = load_artifact_payloads(results_dir, args.limit)
     print(f"load_test_artifact_count={len(files)}")
-    print(f"showing={len(selected)}")
+    print(f"showing={len(payloads)}")
 
-    for artifact in selected:
-        payload = json.loads(artifact.read_text(encoding="utf-8"))
-        status_counts = payload.get("status_counts", {})
-        print(
-            " | ".join(
-                [
-                    f"timestamp={payload.get('timestamp_utc', 'unknown')}",
-                    f"label={payload.get('label', '')}",
-                    f"requests={payload.get('requests', 0)}",
-                    f"concurrency={payload.get('concurrency', 0)}",
-                    f"success_rate={payload.get('success_rate', 0):.2f}",
-                    f"throttled_rate={payload.get('throttled_rate', 0):.2f}",
-                    f"status_counts={status_counts}",
-                    f"artifact={artifact.as_posix()}",
-                ]
-            )
-        )
+    for payload in payloads:
+        print(format_payload_line(payload))
 
 
 if __name__ == "__main__":
