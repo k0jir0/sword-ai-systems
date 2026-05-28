@@ -77,7 +77,7 @@ Sword/
 ## Quick Start (Local)
 
 ```bash
-cd McGillSoftware/Sword
+cd Sword
 python -m venv .venv
 .venv\Scripts\activate
 copy .env.example .env
@@ -86,6 +86,18 @@ uvicorn backend.app.main:app --host 127.0.0.1 --port 8080 --reload
 ```
 
 API docs will be at `http://127.0.0.1:8080/docs`.
+
+### One-Command Validation (PowerShell)
+
+```powershell
+python -m pip install -e ".[dev]"; pytest -q; python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8080
+```
+
+Expected validation results:
+
+- Tests complete with passing status.
+- `GET /health` returns status `ok`.
+- `GET /metrics` returns Prometheus-style counters when `METRICS_ENABLED=true`.
 
 ## Production Controls
 
@@ -142,6 +154,33 @@ python scripts/eval_retrieval.py --path . --glob "**/*.txt" --top-k 4
 ```bash
 pytest -q
 ```
+
+## Learning Paths
+
+### Fundamentals Path
+
+- Run `python scripts/train_mlp_demo.py --seed 42 --epochs 300`.
+- Observe training loss and accuracy changes over time.
+- Re-run with the same seed to verify reproducibility.
+
+### Transformer Path
+
+- Run `python scripts/train_transformer_demo.py --model-name distilbert-base-uncased --epochs 1`.
+- Review printed `accuracy` and `f1` summary metrics.
+- Adjust sample sizes and batch sizes to learn resource/quality trade-offs.
+
+### RAG Path
+
+- Ingest files with chunking controls: `python scripts/ingest_docs.py --path . --glob "**/*.txt" --chunk-size 800 --chunk-overlap 120`.
+- Evaluate retrieval quality: `python scripts/eval_retrieval.py --path . --glob "**/*.txt" --top-k 4`.
+- Query `/rag/query` and compare retrieval contexts against answer grounding.
+
+## Production Operations
+
+- Configure `API_KEY` to enforce authenticated RAG endpoints.
+- Tune `RATE_LIMIT_PER_MINUTE` to enforce throttling policy.
+- Select provider with `RAG_LLM_PROVIDER` (`deterministic`, `ollama`, `openai`).
+- Verify observability via `X-Request-ID` response header and `/metrics` output.
 
 ## Notes
 

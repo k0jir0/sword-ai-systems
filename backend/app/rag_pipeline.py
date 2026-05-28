@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import logging
+from typing import Any
 
 import chromadb
 from sentence_transformers import SentenceTransformer
@@ -27,14 +28,41 @@ class RAGPipeline:
         self.collection = self.client.get_or_create_collection(name="sword_docs")
         self.llm_client = llm_client or build_llm_client(self.settings)
 
-    def ingest(self, documents: list[str]) -> int:
-        cleaned = [doc.strip() for doc in documents if doc and doc.strip()]
+    def ingest(
+        self,
+        documents: list[str],
+        metadatas: list[dict[str, Any]] | None = None,
+        ids: list[str] | None = None,
+    ) -> int:
+        cleaned: list[str] = []
+        cleaned_metadatas: list[dict[str, Any]] = []
+
+        for index, doc in enumerate(documents):
+            normalized = (doc or "").strip()
+            if not normalized:
+                continue
+            cleaned.append(normalized)
+            if metadatas and index < len(metadatas):
+                cleaned_metadatas.append(metadatas[index])
+
         if not cleaned:
             return 0
 
         embeddings = self.embedder.encode(cleaned).tolist()
-        ids = [f"doc_{self.collection.count()}_{index}" for index in range(len(cleaned))]
-        self.collection.add(ids=ids, documents=cleaned, embeddings=embeddings)
+
+        if ids is None:
+            base_count = self.collection.count()
+            ids = [f"doc_{base_count}_{index}" for index in range(len(cleaned))]
+
+        add_kwargs: dict[str, Any] = {
+            "ids": ids,
+            "documents": cleaned,
+            "embeddings": embeddings,
+        }
+        if cleaned_metadatas and len(cleaned_metadatas) == len(cleaned):
+            add_kwargs["metadatas"] = cleaned_metadatas
+
+        self.collection.add(**add_kwargs)
         return len(cleaned)
 
     def query(self, question: str, top_k: int | None = None) -> RetrievalResult:

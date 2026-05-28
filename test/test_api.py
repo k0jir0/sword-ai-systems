@@ -53,6 +53,20 @@ def test_ingest_requires_api_key_when_configured() -> None:
     assert authorized.json()["indexed_documents"] == 2
 
 
+def test_query_requires_api_key_when_configured() -> None:
+    client = build_test_client(api_key="secret")
+
+    unauthorized = client.post("/rag/query", json={"question": "hello"})
+    assert unauthorized.status_code == 401
+
+    authorized = client.post(
+        "/rag/query",
+        headers={"x-api-key": "secret"},
+        json={"question": "hello"},
+    )
+    assert authorized.status_code == 200
+
+
 def test_query_returns_provider_metadata() -> None:
     client = build_test_client(api_key="")
     response = client.post("/rag/query", json={"question": "hello"})
@@ -83,3 +97,16 @@ def test_metrics_endpoint_exposes_counters() -> None:
     payload = response.text
     assert "sword_requests_total" in payload
     assert "sword_requests_by_status" in payload
+
+
+def test_metrics_endpoint_returns_404_when_disabled() -> None:
+    client = build_test_client(api_key="", metrics_enabled=False)
+    response = client.get("/metrics")
+    assert response.status_code == 404
+
+
+def test_empty_ingest_payload_indexes_zero_documents() -> None:
+    client = build_test_client(api_key="")
+    response = client.post("/rag/ingest", json={"documents": ["", "  "]})
+    assert response.status_code == 200
+    assert response.json()["indexed_documents"] == 0

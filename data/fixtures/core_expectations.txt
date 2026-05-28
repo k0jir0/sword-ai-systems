@@ -1,0 +1,13 @@
+Sword learning expectations fixture corpus
+
+Core learning outcomes:
+- Neural networks and deep learning fundamentals.
+- Gradient descent and backpropagation training dynamics.
+- Transformer-based NLP workflows.
+- Production-oriented Retrieval-Augmented Generation (RAG).
+
+Production capabilities expected:
+- End-to-end ingestion and retrieval query flow.
+- API deployment with authentication and rate limiting.
+- Observability through request IDs and metrics.
+- Repeatable tests and CI validation.

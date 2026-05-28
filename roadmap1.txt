@@ -1,0 +1,197 @@
+Sword Project Completion Roadmap
+
+Version: 1.0
+Date: 2026-05-28
+Scope: Complete Sword against current expectations for deep learning fundamentals, transformer workflows, and production-ready RAG delivery.
+
+Execution Status (2026-05-28)
+
+Completed today:
+- Milestone 1 core actions implemented:
+	- README now includes a one-command validation sequence.
+	- Local validation executed: `pytest -q` passed with 8 tests.
+	- CI pathing was fixed earlier and pushed to GitHub.
+- Milestone 2 actions implemented:
+	- `scripts/train_mlp_demo.py` now supports seed, epochs, batch size, learning rate, and print interval.
+	- Per-epoch training metrics and final run summary are now emitted.
+- Milestone 3 actions implemented:
+	- `scripts/train_transformer_demo.py` now supports configurable model/data/training parameters.
+	- Evaluation summary now includes accuracy and F1 output.
+- Milestone 4 partial completion:
+	- `scripts/ingest_docs.py` now supports chunking (`chunk_size`, `chunk_overlap`) and chunk metadata.
+	- `scripts/eval_retrieval.py` now reports retrieval recall and keyword recall with miss diagnostics.
+- Milestone 5 partial completion:
+	- API tests expanded for failure paths (query auth checks, metrics disabled, empty ingest).
+- Milestone 6 partial completion:
+	- Added `docs/architecture.md` and `docs/research-extensions.md`.
+
+Evidence captured today:
+- Test run: `8 passed in 22.70s`.
+- MLP smoke run completed with reproducible metrics output.
+- Ingest/eval smoke run completed with retrieval and keyword recall summaries.
+
+North-Star Completion Definition
+
+Sword is complete when it demonstrates all three expectation pillars with evidence:
+1. Deep learning fundamentals are runnable, explainable, and reproducible.
+2. Transformer-based NLP workflows are runnable and evaluable.
+3. End-to-end RAG is production-oriented (API, auth, rate-limit, observability, tests, CI, deployment path).
+
+Expectation-to-Workstream Mapping
+
+Expectation A: Neural networks and deep learning fundamentals
+Workstream: ML Foundations
+Current assets: scripts/train_mlp_demo.py
+Completion evidence: reproducible run logs, explained hyperparameters, baseline metric targets.
+
+Expectation B: Transformer architectures and NLP workflows
+Workstream: Transformer Workflow
+Current assets: scripts/train_transformer_demo.py
+Completion evidence: successful fine-tune/inference path, task-level metrics, documented constraints.
+
+Expectation C: AI systems in production with end-to-end RAG
+Workstream: RAG Production System
+Current assets: backend/app/*, scripts/ingest_docs.py, scripts/eval_retrieval.py, tests, CI.
+Completion evidence: ingestion-query loop, provider abstraction, API controls, metrics, stable CI.
+
+Milestone Plan
+
+Milestone 1: Baseline Stabilization and Environment Lock (Days 1-2)
+Goal: ensure deterministic local and CI behavior before feature expansion.
+Tasks:
+- Verify .env.example aligns with config.py and README runtime controls.
+- Pin critical dependency ranges when instability is observed.
+- Add a one-command validation sequence to README (install, test, run API).
+- Confirm GitHub Actions passes on main and PR.
+Deliverables:
+- Updated dependency notes and environment checks.
+- Green CI status screenshot/log reference.
+Exit criteria:
+- pytest suite passes locally and in CI.
+- API boot and /health, /metrics endpoints verified.
+
+Milestone 2: Foundations Track Completion (Days 2-4)
+Goal: make deep learning fundamentals demonstrably educational and reproducible.
+Tasks:
+- Extend train_mlp_demo.py output with clear epoch metrics (loss/accuracy).
+- Add configurable seed, batch size, learning rate, epochs.
+- Document expected metric band and troubleshooting guidance.
+Deliverables:
+- Reproducible MLP run artifacts in logs or docs/examples.
+- README subsection: "Learning Path - Fundamentals".
+Exit criteria:
+- Script executes end-to-end with consistent results across two runs (seeded).
+- Learner can explain gradient descent/backprop using script outputs.
+
+Milestone 3: Transformer Track Completion (Days 4-6)
+Goal: provide practical transformer training/evaluation workflow.
+Tasks:
+- Ensure train_transformer_demo.py supports task, model, and epoch configuration.
+- Capture evaluation metric(s) and inference sample outputs.
+- Add memory/runtime notes for constrained hardware.
+Deliverables:
+- Transformer run log with metrics and sample predictions.
+- README subsection: "Learning Path - Transformers".
+Exit criteria:
+- Transformer demo runs without manual code edits.
+- At least one quantitative evaluation metric is reported.
+
+Milestone 4: RAG Quality and Data Pipeline Hardening (Days 6-8)
+Goal: move from "works" to measurable retrieval quality.
+Tasks:
+- Improve ingest_docs.py with chunking strategy options and metadata tags.
+- Expand eval_retrieval.py with recall-at-k style summary and error cases.
+- Add small curated fixture corpus for repeatable evaluation.
+Deliverables:
+- Retrieval evaluation report template.
+- Documented chunking/retrieval parameter guidance.
+Exit criteria:
+- End-to-end ingest -> retrieve -> answer loop validated on fixture corpus.
+- Retrieval metrics tracked across at least two parameter settings.
+
+Milestone 5: Production Controls and Reliability (Days 8-10)
+Goal: ensure API operates as a production-oriented service.
+Tasks:
+- Verify auth, rate limiting, and request-id middleware behavior under load.
+- Confirm metrics naming consistency and useful counters/histograms.
+- Add failure-path tests (bad provider config, empty corpus, timeouts).
+Deliverables:
+- Expanded test_api.py coverage for negative and edge cases.
+- Operational runbook section in README (startup, env, common failures).
+Exit criteria:
+- No critical path endpoint lacks tests for success + failure modes.
+- Metrics endpoint reflects request volume/status classes.
+
+Milestone 6: Documentation, Developer UX, and Final Packaging (Days 10-12)
+Goal: make Sword easy to onboard, teach, and extend.
+Tasks:
+- Finalize README flow order: About -> Quick Start -> Learning Paths -> Production Ops.
+- Add docs/architecture.md with component diagram and request flow.
+- Add docs/research-extensions.md from paper-level extension ideas.
+- Ensure Docker compose path and local path both verified.
+Deliverables:
+- Complete documentation bundle for learners and maintainers.
+- Final release checklist and version tag guidance.
+Exit criteria:
+- New user can clone and run tests/API within 30 minutes.
+- Documentation matches actual commands and repository layout.
+
+Milestone 7: Completion Review and Sign-Off (Day 13)
+Goal: objective confirmation that expectations are fully met.
+Tasks:
+- Run final completion checklist (below).
+- Record evidence links (CI run URL, test output, sample query output, metric snapshot).
+- Create completion summary report.
+Deliverables:
+- completion-report.txt (or docs/completion-report.md).
+Exit criteria:
+- All checklist items marked pass with evidence.
+
+Final Completion Checklist
+
+Learning and Theory
+- MLP demo runs and exposes optimization behavior clearly.
+- Transformer demo runs and reports quantitative results.
+- Concepts tie back to expectations in index.txt.
+
+RAG and Production
+- Ingestion and query endpoints work with real corpus data.
+- Retrieval evaluation script produces interpretable quality metrics.
+- Generation provider abstraction works for deterministic mode and at least one external provider path.
+
+Operational Readiness
+- API key auth enforced when configured.
+- Rate limiting enforced and tested.
+- Metrics endpoint enabled and useful.
+- CI workflow green on latest main.
+
+Quality and Documentation
+- Automated tests pass locally and in CI.
+- README accurately reflects current commands and architecture.
+- Learning pathway and expected outcomes are explicit.
+
+Risk Register and Mitigation Plan
+
+Risk: dependency drift breaks scripts or CI.
+Mitigation: periodic lock updates, CI on every PR, reproducible env notes.
+
+Risk: retrieval quality regressions go unnoticed.
+Mitigation: baseline retrieval metrics and regression thresholds.
+
+Risk: provider misconfiguration causes runtime failures.
+Mitigation: startup validation, clear env docs, failure-path tests.
+
+Risk: onboarding friction for learners.
+Mitigation: stepwise README learning paths and verified copy-paste commands.
+
+Execution Rhythm
+
+Cadence:
+- Daily: run tests and log progress against milestone tasks.
+- Every 2 days: checkpoint demo outputs and documentation updates.
+- End of each milestone: acceptance review with evidence.
+
+Recommended immediate next actions (next 24 hours)
+1. Run Milestone 1 validation sequence and record outputs.
+2. Add reproducibility controls to train_mlp_demo.py and document expected metrics.
+3. Draft docs/architecture.md to align implementation and teaching flow.
