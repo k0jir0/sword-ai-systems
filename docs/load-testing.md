@@ -18,6 +18,14 @@ Output includes:
 - latency percentiles (`latency_ms_p50`, `latency_ms_p95`)
 - persisted artifact path
 
+To run a simple staged stress profile across multiple concurrency levels:
+
+```bash
+python scripts/load_test_rate_limit.py --base-url http://127.0.0.1:8080 --requests 80 --concurrency-profile 5,10,20,40 --label profile_run
+```
+
+This writes a single artifact containing per-stage summaries under `stage_summaries`.
+
 Artifacts are written to:
 - `data/load-testing-results/`
 

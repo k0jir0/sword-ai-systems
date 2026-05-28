@@ -17,6 +17,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--base-url", default="http://127.0.0.1:8080")
     parser.add_argument("--requests", type=int, default=60)
     parser.add_argument("--concurrency", type=int, default=10)
+    parser.add_argument(
+        "--concurrency-profile",
+        default="",
+        help="Optional comma-separated list of concurrency levels to run sequentially as a stress profile",
+    )
     parser.add_argument("--api-key", default="")
     parser.add_argument("--question", default="What are the core concepts covered?")
     parser.add_argument("--timeout", type=float, default=20.0)
@@ -27,6 +32,23 @@ def parse_args() -> argparse.Namespace:
         help="Directory where load test JSON artifacts are written",
     )
     return parser.parse_args()
+
+
+def parse_concurrency_profile(raw_profile: str) -> list[int]:
+    if not raw_profile.strip():
+        return []
+
+    profile: list[int] = []
+    for token in raw_profile.split(","):
+        concurrency = int(token.strip())
+        if concurrency <= 0:
+            raise ValueError("Concurrency profile values must be positive integers")
+        profile.append(concurrency)
+
+    if not profile:
+        raise ValueError("Concurrency profile must contain at least one value")
+
+    return profile
 
 
 async def send_one(
@@ -87,12 +109,13 @@ def build_summary_payload(
     status_counter: Counter[int],
     latency_seconds: list[float],
     timestamp: str,
+    stage_summaries: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     total = sum(status_counter.values())
     success = status_counter.get(200, 0)
     throttled = status_counter.get(429, 0)
 
-    return {
+    payload: dict[str, Any] = {
         "timestamp_utc": timestamp,
         "base_url": args.base_url,
         "requests": args.requests,
@@ -111,23 +134,76 @@ def build_summary_payload(
         },
     }
 
+    if stage_summaries is not None:
+        payload["stage_summaries"] = stage_summaries
+
+    return payload
+
+
+def summarize_results(
+    args: argparse.Namespace,
+    results: list[tuple[int, float]],
+    elapsed_seconds: float,
+    timestamp: str,
+    stage_summaries: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    status_counter: Counter[int] = Counter(status for status, _ in results)
+    latency_seconds = [latency for _, latency in results]
+    return build_summary_payload(
+        args=args,
+        elapsed_seconds=elapsed_seconds,
+        status_counter=status_counter,
+        latency_seconds=latency_seconds,
+        timestamp=timestamp,
+        stage_summaries=stage_summaries,
+    )
+
 
 def main() -> None:
     args = parse_args()
-    start = perf_counter()
-    results = asyncio.run(run_load(args))
-    elapsed = perf_counter() - start
+    stage_profile = parse_concurrency_profile(args.concurrency_profile)
+    if not stage_profile:
+        stage_profile = [args.concurrency]
 
-    status_counter: Counter[int] = Counter(status for status, _ in results)
-    latency_seconds = [latency for _, latency in results]
+    stage_summaries: list[dict[str, Any]] = []
+    combined_results: list[tuple[int, float]] = []
+    elapsed = 0.0
+
+    for concurrency in stage_profile:
+        stage_args = argparse.Namespace(**vars(args))
+        stage_args.concurrency = concurrency
+        stage_start = perf_counter()
+        stage_results = asyncio.run(run_load(stage_args))
+        stage_elapsed = perf_counter() - stage_start
+        elapsed += stage_elapsed
+        combined_results.extend(stage_results)
+        stage_summaries.append(
+            summarize_results(
+                args=stage_args,
+                results=stage_results,
+                elapsed_seconds=stage_elapsed,
+                timestamp=datetime.now(tz=timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+            )
+        )
+
+    status_counter: Counter[int] = Counter(status for status, _ in combined_results)
+    latency_seconds = [latency for _, latency in combined_results]
 
     total = sum(status_counter.values())
     print(f"total_requests={total}")
-    print(f"concurrency={args.concurrency}")
+    print(f"concurrency_profile={','.join(str(value) for value in stage_profile)}")
     print(f"elapsed_seconds={elapsed:.2f}")
 
     for status_code in sorted(status_counter.keys()):
         print(f"status_{status_code}={status_counter[status_code]}")
+
+    for stage_summary in stage_summaries:
+        print(
+            "stage_"
+            f"concurrency={stage_summary['concurrency']} "
+            f"success_rate={stage_summary['success_rate']:.2f} "
+            f"throttled_rate={stage_summary['throttled_rate']:.2f}"
+        )
 
     success = status_counter.get(200, 0)
     throttled = status_counter.get(429, 0)
@@ -148,6 +224,7 @@ def main() -> None:
         status_counter=status_counter,
         latency_seconds=latency_seconds,
         timestamp=timestamp,
+        stage_summaries=stage_summaries if len(stage_summaries) > 1 else None,
     )
 
     output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
