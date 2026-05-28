@@ -1,197 +1,263 @@
-Title: Sword as a Pedagogical and Production Bridge for Modern AI Systems
-Subtitle: A PhD-Level Technical Exposition of Architecture, Learning Theory, and Operationalization
+Title: Sword AI Systems as an Executable Research Substrate for End-to-End AI Engineering
+Subtitle: An Advanced Computer Science Analysis of Learning, Retrieval-Augmented Generation, Systems Control, and Operational Validation
 
 Abstract
 
-Sword is a compact but conceptually rich AI systems project designed to unify three layers that are often taught in isolation: (1) deep learning fundamentals, (2) transformer-era representation learning and language modeling, and (3) production-grade Retrieval-Augmented Generation (RAG) services. This paper analyzes Sword as both an instructional artifact and a systems prototype. We formalize the learning objectives, derive the mathematical foundations that motivate each subsystem, and map those foundations to concrete implementation choices in the codebase. We then evaluate Sword from the perspectives of software architecture, reliability, observability, security, and research extensibility. The central thesis is that Sword succeeds because it operationalizes a full stack of ideas: from gradient-based optimization and statistical learning theory to deployment-time concerns such as API governance, rate limiting, request traceability, and controllable generation-provider abstraction.
+Sword AI Systems is a compact but unusually complete program for studying and operating modern AI software as an integrated stack rather than as isolated components. The system combines educational machine learning workflows, a Retrieval-Augmented Generation (RAG) pipeline, a configurable language-model provider layer, a production-style FastAPI service, and a fully operational interactive command-line control plane. This paper analyzes Sword as both a pedagogical artifact and a systems prototype. The central argument is that Sword is valuable because it closes the gap between theoretical AI instruction and executable software operations. It does not merely demonstrate neural network training or semantic retrieval in isolation; it binds together model training, corpus ingestion, dense retrieval, grounded response generation, API security, rate limiting, metrics, load testing, continuous validation, and operator tooling in one coherent program. From a computer science perspective, Sword is best understood as a minimal but complete environment for AI systems literacy. It exposes the full lifecycle of modern intelligent software: representation learning, indexing, retrieval, inference orchestration, service governance, observability, validation, and control.
 
-1. Problem Framing: Why Sword Matters
+1. Introduction
 
-A persistent failure mode in AI education is curricular fragmentation. Students may learn backpropagation in one course, transformers in another, and cloud deployment in a third, yet never internalize the end-to-end coupling between model behavior and systems behavior. Sword addresses this by enforcing a contiguous pipeline:
+Many AI projects are structurally incomplete. Educational repositories often stop at notebooks and benchmark scripts, while production systems often conceal the mathematical and architectural assumptions that govern their behavior. Sword avoids both failures. It is a runnable program that integrates:
 
-1. Foundational learning scripts establish neural and transformer fundamentals.
-2. A retrieval substrate grounds generation in a persistent knowledge store.
-3. An API service exposes behavior under realistic constraints (auth, throttling, metrics).
+1. educational deep learning demonstrations,
+2. transformer-based fine-tuning workflows,
+3. vector-based semantic retrieval,
+4. configurable answer generation backends,
+5. a typed HTTP service surface,
+6. security and observability controls, and
+7. an operator-facing CLI that exposes all major program functions.
 
-This is not merely engineering convenience. It reflects a deeper methodological claim: modern AI competence requires compositional reasoning across mathematics, software architecture, and operations. Sword therefore functions as a "minimal complete environment" for AI systems literacy.
+This combination makes Sword more than an application. It is an executable systems model of what contemporary AI software actually is: a layered socio-technical artifact in which learning algorithms, data stores, APIs, controls, and runtime diagnostics mutually constrain one another.
 
-2. Conceptual Architecture
+The rest of this paper explains what the program does, why its architecture matters, how its learning and retrieval components work, how its service layer is governed, and why the CLI materially improves the system by turning architectural capabilities into accessible operational workflows.
 
-Sword’s architecture is intentionally modular and can be represented as a layered graph:
+2. Program Thesis
 
-A. Learning Layer
-- MLP training demo (deep learning fundamentals)
-- Transformer training demo (token-level sequence modeling)
+Sword is designed around a simple but important thesis: AI competence is not achieved by understanding models alone. Serious AI work requires simultaneous fluency in four domains:
 
-B. Retrieval Layer
-- Document ingestion pipeline
-- Embedding model via SentenceTransformers
-- ChromaDB persistence and nearest-neighbor retrieval
+1. learning theory and optimization,
+2. representation and retrieval,
+3. service engineering and runtime governance, and
+4. empirical validation and failure analysis.
 
-C. Generation Layer
-- Provider abstraction (deterministic, Ollama, OpenAI)
-- Prompt construction over retrieved contexts
+Most programs teach one or two of these in isolation. Sword teaches all four by implementation. The user can train an MLP, fine-tune a transformer, ingest documents into a semantic index, issue grounded queries, inspect provider health, run load tests, and validate quality thresholds from the same project. This makes the system suitable for advanced instruction, reproducible experimentation, and early-stage research prototyping.
 
-D. Service and Control Layer
-- FastAPI/Uvicorn endpoint surface
-- Pydantic settings model for environment-driven behavior
-- API key gating, rate limiting, request IDs
-- Metrics exposition in Prometheus text format
+3. System Overview
 
-E. Validation Layer
-- Pytest API tests
-- Retrieval evaluation script
-- CI workflow for repeatable verification
+At a high level, Sword consists of five interacting strata.
 
-This layered decomposition yields two pedagogical benefits. First, each layer can be studied in isolation. Second, learners can observe inter-layer propagation of design decisions, for example how embedding dimensionality or chunking strategy influences downstream generation quality and API latency.
+3.1 Learning Layer
 
-3. Mathematical Foundations and Their Systemic Consequences
+The learning layer contains runnable scripts that operationalize two major families of machine learning practice.
 
-3.1 Gradient Descent and Backpropagation
+A. MLP Fundamentals Demo
+The MLP training program demonstrates supervised learning on a synthetic nonlinear classification task. It exposes seeds, epochs, batch sizes, and learning rates so that users can observe reproducibility, optimization behavior, convergence patterns, and generalization.
 
-At the learning layer, Sword’s MLP script embodies empirical risk minimization:
+B. Transformer Demo
+The transformer demo fine-tunes a sequence classification model on an IMDB sentiment task using Hugging Face tooling. This component introduces tokenizer-model coupling, pretrained initialization, transfer learning, evaluation metrics, and trainer-based orchestration.
 
-Given dataset D={(x_i, y_i)}_{i=1}^n and model f_theta, optimize
-J(theta) = (1/n) sum_{i=1}^n L(f_theta(x_i), y_i)
+Together these learning programs establish the representational and optimization background required to understand why the downstream retrieval and generation system behaves as it does.
 
-with iterative updates
-theta_{t+1} = theta_t - eta * grad_theta J(theta_t)
+3.2 Retrieval Layer
 
-The didactic value is not only equation familiarity. It is exposure to optimization pathologies (plateaus, overfitting, sensitivity to learning rate) and their practical mitigation. These pathologies later reappear in transformer fine-tuning and in retrieval calibration where representation quality determines nearest-neighbor fidelity.
+The retrieval layer ingests local documents, chunks them, embeds them with SentenceTransformers, and persists the resulting vectors in ChromaDB. This produces a searchable semantic memory over user-supplied corpora.
 
-3.2 Transformer Representation Learning
+The retrieval pipeline is not a cosmetic add-on. It is the structural mechanism by which Sword grounds language model output in an evidence base. Rather than treating the language model as a closed parametric oracle, Sword treats it as one module in a larger inference graph in which external knowledge can be indexed, retrieved, and injected at answer time.
 
-Transformer workflows generalize feature extraction via self-attention. For token matrix X, attention computes
-Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) V
+3.3 Generation Layer
 
-Sword’s transformer demo introduces learners to tokenizer-model coupling, sequence truncation effects, and transfer learning dynamics. In production, this background is crucial because the same representational assumptions underpin sentence embeddings used in retrieval.
+Sword abstracts answer generation behind interchangeable providers:
 
-3.3 Retrieval as Approximate Inference
+1. deterministic mode,
+2. Ollama-backed local inference, and
+3. OpenAI-backed hosted inference.
 
-RAG retrieval in Sword operationalizes a conditional approximation:
+This provider abstraction is important both pedagogically and architecturally. Pedagogically, it lets learners compare deterministic and generative behavior. Architecturally, it demonstrates late binding: generation policy can change at deployment time without restructuring the rest of the application.
 
-p(answer | question, corpus) is approximated by
+3.4 Service Layer
+
+The service layer is implemented with FastAPI and exposes endpoints for health, provider diagnostics, metrics, document ingestion, and query execution. Request and response contracts are typed through Pydantic schemas, while configuration is supplied through a settings object backed by environment variables.
+
+This layer is where Sword stops being a local ML demo and becomes a deployable system. It introduces all the standard concerns of networked software: request boundaries, typed schemas, dependency initialization, runtime configuration, and service lifecycle management.
+
+3.5 Control and Validation Layer
+
+Sword includes a substantial control and validation surface:
+
+1. a full interactive CLI,
+2. automated tests,
+3. retrieval evaluation scripts,
+4. completion checks,
+5. load testing harnesses,
+6. load summaries and threshold gates, and
+7. CI-backed repeatability.
+
+This layer operationalizes the difference between a codebase that merely runs and a system that can be evaluated, exercised, and governed.
+
+4. Mathematical and Algorithmic Foundations
+
+4.1 Empirical Risk Minimization in the MLP Demo
+
+The MLP component formalizes supervised learning as an empirical risk minimization problem. Let the dataset be D = {(x_i, y_i)} from i = 1 to n, the model be f_theta, and the loss be L. The optimization target is:
+
+J(theta) = (1 / n) * sum from i = 1 to n of L(f_theta(x_i), y_i)
+
+Parameters are updated via gradient-based optimization:
+
+theta_(t+1) = theta_t - eta * grad_theta J(theta_t)
+
+In Sword, these concepts are not left abstract. Users control the seed, epoch count, batch size, and learning rate, making optimization behavior observable rather than merely described.
+
+4.2 Transformer Transfer Learning
+
+The transformer component fine-tunes a pretrained language representation model on a sentiment classification task. This exposes a key contemporary systems reality: modern AI applications are often built not by training from scratch, but by adapting pretrained representations under new task constraints. In Sword, this demonstrates:
+
+1. tokenizer dependence,
+2. bounded sequence processing,
+3. batch-oriented training orchestration,
+4. pretrained weight reuse, and
+5. task-specific evaluation through accuracy and F1.
+
+4.3 Dense Retrieval as Approximate Evidence Selection
+
+The RAG subsystem approximates answer generation through a conditional evidence pipeline. Instead of directly modeling:
+
+p(answer | question, corpus)
+
+Sword approximates the answer through retrieved context:
+
 p(answer | question, retrieved_context(question, corpus))
 
-where retrieved_context selects top-k embedding neighbors under cosine-like similarity in vector space. This induces a two-stage error decomposition:
+This decomposition creates two distinct error surfaces:
 
-1. Retrieval error: relevant context omitted or low-ranked.
-2. Generation error: relevant context present but misused.
+1. retrieval failure, in which relevant evidence is omitted or poorly ranked, and
+2. generation failure, in which relevant evidence is present but misused.
 
-Sword’s evaluation script helps learners distinguish these error regimes, an essential practice in serious RAG research.
+Sword explicitly evaluates this decomposition through retrieval recall, keyword recall, and grounding-oriented probe checks.
 
-4. Retrieval-Augmented Generation Pipeline in Sword
+5. What the Program Actually Does
 
-4.1 Ingestion
+The practical behavior of Sword can be described as a sequence of workflows.
 
-Ingestion scripts parse local text or markdown artifacts, transform them into embedding vectors, and persist into ChromaDB. The persistent store converts a static corpus into an indexed semantic memory. In educational terms, this teaches data lifecycle thinking: data is not a one-time input but a continuously maintained knowledge substrate.
+5.1 Corpus Ingestion
 
-4.2 Retrieval and Context Packing
+The user points Sword at a directory of text-based documents. The ingestion script reads files matching a glob pattern, chunks them according to user-defined sizes and overlaps, embeds those chunks, and writes them into a persistent ChromaDB vector store. This converts an arbitrary document collection into a searchable knowledge substrate.
 
-At query time, the pipeline obtains top-k semantically proximate chunks. The quality of this stage depends on chunk granularity, overlap policy, embedding model domain fit, and corpus cleanliness. Sword exposes these variables through script-level controls, making retrieval behavior experimentally tractable.
+5.2 Grounded Query Answering
 
-4.3 Generation Provider Abstraction
+The user submits a question to the /rag/query endpoint or through the CLI. Sword retrieves semantically similar chunks, passes those contexts into the generation layer, and returns an answer plus supporting contexts and provider metadata. In deterministic mode, this produces reproducible outputs suitable for CI and baseline testing.
 
-Sword’s generation layer supports deterministic, Ollama, and OpenAI backends behind a common interface. This abstraction is architecturally significant:
+5.3 Model Education and Experimentation
 
-- Deterministic mode enables reproducible testing and CI stability.
-- Ollama mode supports local/self-hosted deployment economics.
-- OpenAI mode allows rapid adoption of frontier hosted models.
+The user can run the MLP demo to observe optimization and run the transformer demo to observe model adaptation. This makes Sword suitable not just for using AI systems, but for studying how such systems are built from the learning layer upward.
 
-Because provider choice is environment-configurable, learners observe the systems principle of late binding: policy can change without source-level refactoring.
+5.4 Service Operations
 
-5. API and Production Engineering
+The user can start and stop the API server, inspect health and provider status, tail logs, inspect metrics, and view settings. These are not trivial utilities. They embody the operational requirements of real AI services, where availability, routing, and diagnostics matter as much as raw model performance.
 
-5.1 Service Surface
+5.5 Reliability Evaluation
 
-FastAPI defines a typed, schema-driven interface for ingestion and query operations. Pydantic models enforce boundary contracts, reducing implicit assumptions between client and server. This offers a practical introduction to contract-first API design.
+The user can run tests, completion checks, retrieval evaluation, load tests, artifact summarization, and threshold gates. This turns Sword into a system that can be falsified and measured rather than merely described.
 
-5.2 Security and Abuse Resistance
+6. The CLI as a Systems Control Plane
 
-Sword includes API key checks on protected endpoints and per-route sliding-window rate limiting. Pedagogically, this exposes students to adversarial and operational realities often omitted from model-centric courses. A model that answers accurately is still not production-ready if unauthenticated or trivially DoS-able.
+One of the most important program elements is the CLI. Sword now exposes its functionality through a sectioned, interactive command-line control plane with five sections:
 
-5.3 Observability and Diagnostics
+1. Server
+2. RAG
+3. Learning Scripts
+4. Reliability
+5. Configuration
 
-Request IDs and metrics endpoint support post-hoc causal reconstruction and performance monitoring. In modern distributed systems, debuggability is a first-class feature, not a luxury. Sword’s observability components instantiate this doctrine in a simplified but authentic form.
+Across these sections, the CLI exposes all major system actions, including:
 
-5.4 CI as Epistemic Control
+1. server start, stop, restart, status, and log tailing,
+2. document ingestion through script and API pathways,
+3. grounded query execution,
+4. retrieval evaluation and grounding probe evaluation,
+5. MLP and transformer demo execution,
+6. test suite execution,
+7. completion checks,
+8. load testing and staged concurrency profiles,
+9. load summary reporting,
+10. threshold gating, and
+11. configuration, metrics, and provider health inspection.
 
-Automated tests and CI workflows convert claims into continuously re-checked invariants. This is especially important in AI stacks where model dependencies and transitive package updates can silently alter behavior. Sword’s CI framing communicates a key epistemic norm: reproducibility must be operational, not rhetorical.
+This matters because architectural power without operator accessibility is incomplete. The CLI converts Sword from a set of scripts into a controlled program surface. It reduces operational friction, exposes dependencies explicitly, and makes validation reproducible for both developers and learners.
 
-6. Pedagogical Design Analysis
+7. Security, Governance, and Observability
 
-Sword aligns with advanced learning science principles:
+7.1 Authentication
 
-A. Cognitive Apprenticeship
-Learners inspect and modify realistic artifacts (API endpoints, retrieval scripts, metrics), moving beyond toy notebooks.
+Sword supports API key enforcement on protected RAG endpoints. This establishes a basic but essential access-control boundary and models a minimal production posture.
 
-B. Spiral Curriculum
-Core concepts recur at increasing complexity: optimization appears in MLP training, transformer fine-tuning, and retrieval relevance tuning.
+7.2 Rate Limiting
 
-C. Productive Failure
-Because Sword allows controlled provider swaps and retrieval parameter changes, learners can induce and analyze failure modes (hallucination, low recall, throttling events), which strengthens conceptual understanding.
+Per-route sliding-window rate limiting is applied to protect query and ingest paths from abuse and uncontrolled load. This introduces learners to the fact that serving quality is not just about correctness, but about resource fairness and availability under contention.
 
-D. Authentic Assessment
-Evaluation is not limited to accuracy metrics; it includes API behavior, security posture, and operational stability.
+7.3 Metrics and Request Context
 
-7. Research-Level Extensions Enabled by Sword
+Sword records request metrics and attaches request IDs, then exposes Prometheus-style counters at /metrics. This allows operators to reason about route behavior, status distributions, and latency accumulation. In systems terms, Sword treats observability as a core subsystem rather than an afterthought.
 
-Sword can seed multiple PhD-relevant research directions:
+7.4 Log-Based Inspection
 
-1. Retrieval Calibration and Uncertainty
-Estimate confidence over retrieved evidence and propagate uncertainty into generation decisions.
+The CLI and service architecture isolate server logs so they can be tailed without polluting the interactive prompt. This seemingly small decision is important. It preserves operator usability while still providing access to causal runtime evidence.
 
-2. Adaptive Chunking Policies
-Use learned segmentation strategies rather than fixed-size chunking to optimize retrieval utility.
+8. Validation and Empirical Confidence
 
-3. Hybrid Retrieval
-Combine dense embeddings with symbolic or sparse lexical constraints for improved faithfulness.
+Sword includes a meaningful validation story.
 
-4. Hallucination Mitigation
-Implement citation-grounded decoding and refusal policies when evidence support is weak.
+1. Unit and API tests verify functional behavior.
+2. Retrieval probes verify baseline evidence recovery.
+3. Grounding probes distinguish evidence presence from answer grounding.
+4. Completion checks package major regressions into one executable gate.
+5. Load tests measure throughput, latency, and throttling behavior.
+6. Threshold checks formalize performance acceptance criteria.
 
-5. Online Learning Loops
-Integrate user feedback signals to refine ranking or answer synthesis policies over time.
+This validation architecture elevates Sword from a learning repository to an instrumented experimental platform. A central research virtue of the system is that it encodes expectations as executable checks.
 
-6. Cost-Aware Inference Routing
-Route queries to deterministic/local/hosted providers based on complexity, latency SLOs, and budget constraints.
+9. Why Sword Is Pedagogically Strong
 
-7. Formal Service Guarantees
-Develop probabilistic service-level contracts for latency, evidence coverage, and answer calibration.
+Sword is pedagogically effective for four reasons.
 
-8. Threat Model and Risk Considerations
+9.1 It Is Layered But Integrated
 
-Any deployable AI system must be interpreted through a threat model. For Sword-like systems, salient risks include:
+Students can study the MLP demo, the transformer demo, the retrieval system, or the API in isolation, but the project also reveals how these layers depend on one another.
 
-- Prompt injection through ingested documents
-- Data poisoning in knowledge corpus updates
-- Exfiltration through unconstrained generation policies
-- Denial-of-service via query floods
-- Model drift and dependency drift
+9.2 It Makes Failure Legible
 
-Sword already addresses part of this surface through auth and rate limiting, but robust hardening should include content sanitization, provenance tracking, strict output policies, and security-focused integration tests.
+The system exposes real failure modes: invalid provider configuration, retrieval misses, threshold failures, API unavailability, dependency incompatibilities, and load-induced behavior changes. This is critical for advanced learning because expertise is built by explaining failures, not just observing successes.
 
-9. Limitations
+9.3 It Is Configurable Without Being Chaotic
 
-Despite strong educational coverage, Sword remains a pedagogical scaffold rather than a fully hardened enterprise platform. Current constraints include:
+Sword exposes meaningful variation points such as provider selection, chunk sizes, overlap policy, top-k retrieval, training epochs, and load-test concurrency. These are enough to support experimentation without collapsing the system into unbounded complexity.
 
-- Limited built-in benchmarking depth beyond baseline retrieval probes
-- Absence of native multi-tenant isolation
-- No default policy engine for compliance-class governance
-- Potential sensitivity to embedding model-domain mismatch
+9.4 It Is Close to Real Practice
 
-These are not design failures; they are deliberate scope boundaries for a learning-first architecture.
+The project includes the same classes of concerns that appear in nontrivial AI software organizations: environment-driven configuration, HTTP contracts, observability, reproducible tests, threshold gating, and operations tooling.
 
-10. Conclusion
+10. Research Relevance and Extension Paths
 
-Sword demonstrates that advanced AI education can and should collapse the artificial boundary between theory and production. It binds deep learning fundamentals, transformer methodologies, retrieval-centric reasoning, and service engineering into one executable curriculum. Its most important contribution is architectural pedagogy: learners do not merely study equations or call APIs, they reason about an interconnected socio-technical system where mathematical assumptions, software abstractions, and operational constraints co-determine behavior.
+Sword is also a strong base for research extension. Plausible advanced research directions include:
 
-For PhD-level study, Sword is best treated as a living research sandbox. It is sufficiently concrete to expose real engineering tradeoffs, yet sufficiently modular to support controlled experimentation. In this sense, Sword is not just a project implementation; it is a methodological statement about what serious AI systems literacy now requires.
+1. retrieval calibration and evidence uncertainty,
+2. learned chunking strategies,
+3. hybrid dense-sparse retrieval,
+4. citation-grounded decoding,
+5. adaptive provider routing based on cost and latency,
+6. online feedback integration into retrieval and ranking,
+7. formalization of answer faithfulness metrics, and
+8. policy-aware inference controls for secure deployments.
+
+The project's modular structure supports such work because it cleanly separates ingestion, retrieval, generation, service delivery, and control-plane behavior while still making their interactions observable.
+
+11. Limits of the Current Program
+
+Despite its strengths, Sword is not a complete enterprise platform. It does not yet provide native multi-tenant isolation, sophisticated policy enforcement, deep benchmark suites, or compliance-grade governance. Its retrieval quality still depends heavily on corpus quality, chunking policy, and embedding-model fit. Its transformer workflow depends on external model and dataset ecosystems, which introduces compatibility and dependency management concerns.
+
+These are not disqualifying weaknesses. They are normal boundaries for a learning-first but serious system. Indeed, they make the project more valuable as a research substrate because they leave room for rigorous improvement.
+
+12. Conclusion
+
+Sword AI Systems is best understood as a compact executable theory of modern AI software. It is not merely a RAG app, a model demo, or an API service. It is a layered program that teaches and operationalizes the full chain from learning to retrieval to serving to validation. Its most significant contribution is not any single algorithmic novelty, but the architectural fact that all of these concerns coexist in one coherent, runnable system.
+
+For an advanced reader, the value of Sword lies in its integration discipline. The project demonstrates that contemporary AI engineering is fundamentally about composition: composing learning procedures with data representations, retrieval mechanisms with generation policies, inference behavior with service constraints, and system claims with executable validation. Sword therefore functions both as a teaching system and as a small but credible research substrate for studying grounded, testable, and operational AI software.
 
 References for Further Study
 
-- Goodfellow, Bengio, Courville. Deep Learning. MIT Press.
-- Vaswani et al. Attention Is All You Need.
-- Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.
-- Manning et al. Introduction to Information Retrieval.
-- Sculley et al. Hidden Technical Debt in Machine Learning Systems.
+1. Goodfellow, Bengio, and Courville. Deep Learning. MIT Press.
+2. Vaswani et al. Attention Is All You Need.
+3. Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.
+4. Manning, Raghavan, and Schutze. Introduction to Information Retrieval.
+5. Sculley et al. Hidden Technical Debt in Machine Learning Systems.
+6. Zaharia et al. Accelerating the Machine Learning Lifecycle with ML Systems Engineering.
