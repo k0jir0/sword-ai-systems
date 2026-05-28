@@ -49,6 +49,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added `scripts/load_test_rate_limit.py` for empirical 200/429 distribution checks under configurable concurrency.
 - Added timestamped load-test artifact output under `data/load-testing-results/`.
 - Added `scripts/summarize_load_tests.py` for trend summaries across runs.
+- Added latency percentile capture (`p50`, `p95`) in load-test artifacts for performance trend analysis.
 
 ### Documentation and Architecture
 
@@ -102,4 +103,4 @@ Major roadmap milestones were executed in code and documentation with validated 
 ## Remaining Work for Full Completion
 
 - Optional: add load/stress harness for empirical rate-limit behavior under concurrency.
-- Optional: persist richer percentiles (p50/p95 latency) in load-test artifacts.
+- Optional: add automated regression thresholds for latency percentiles.

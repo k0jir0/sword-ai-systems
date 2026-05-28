@@ -15,6 +15,7 @@ python scripts/load_test_rate_limit.py --base-url http://127.0.0.1:8080 --reques
 Output includes:
 - status counts (for example `status_200`, `status_429`)
 - success and throttled rates
+- latency percentiles (`latency_ms_p50`, `latency_ms_p95`)
 - persisted artifact path
 
 Artifacts are written to:
@@ -27,6 +28,8 @@ python scripts/summarize_load_tests.py --results-dir data/load-testing-results -
 ```
 
 This prints a compact history of recent run metrics so you can compare reliability trends over time.
+
+Artifact payloads include latency metrics (`avg`, `p50`, `p95`, `max` in ms), which makes run-to-run performance drift easier to detect.
 
 ## Suggested Practice
 

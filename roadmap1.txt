@@ -28,6 +28,7 @@ Completed today:
 	- Added `scripts/load_test_rate_limit.py` to empirically measure 200/429 behavior under concurrency.
 	- Load-test harness now writes timestamped JSON artifacts for trend analysis.
 	- Added `scripts/summarize_load_tests.py` to compare recent reliability runs.
+	- Load-test artifacts now include latency percentile metrics (`p50`, `p95`).
 - Milestone 6 partial completion:
 	- Added `docs/architecture.md` and `docs/research-extensions.md`.
 	- Added `docs/deployment-topologies.md`.
