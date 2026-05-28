@@ -14,6 +14,8 @@ Use this checklist before tagging a Sword release.
 - [ ] `pytest -q` passes locally.
 - [ ] Retrieval baseline gate passes locally:
   - `python scripts/eval_retrieval.py --path data/fixtures --glob "core_expectations.txt" --probe-file data/fixtures/retrieval_probes.txt --top-k 2 --min-retrieval-recall 1.0 --min-keyword-recall 1.0`
+- [ ] Unified completion checks pass:
+   - `python scripts/run_completion_checks.py`
 - [ ] GitHub Actions workflow is green on latest main commit.
 
 ## 3. Documentation Validation

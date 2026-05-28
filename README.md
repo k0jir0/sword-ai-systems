@@ -93,6 +93,12 @@ API docs will be at `http://127.0.0.1:8080/docs`.
 python -m pip install -e ".[dev]"; pytest -q; python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8080
 ```
 
+Roadmap completion checks (tests + retrieval baseline gate):
+
+```powershell
+python scripts/run_completion_checks.py
+```
+
 Expected validation results:
 
 - Tests complete with passing status.
