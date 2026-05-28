@@ -25,6 +25,7 @@ Completed today:
 - Milestone 5 partial completion:
 	- API tests expanded for failure paths (query auth checks, metrics disabled, empty ingest).
 	- Provider health endpoint added: `/health/provider` with degraded status reporting for misconfigured providers.
+	- Added `scripts/load_test_rate_limit.py` to empirically measure 200/429 behavior under concurrency.
 - Milestone 6 partial completion:
 	- Added `docs/architecture.md` and `docs/research-extensions.md`.
 	- Added `docs/deployment-topologies.md`.

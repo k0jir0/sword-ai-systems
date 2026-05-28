@@ -46,6 +46,7 @@ Major roadmap milestones were executed in code and documentation with validated 
 - Added provider validation tests in `test/test_llm_clients.py`:
   - deterministic provider default
   - OpenAI key requirement enforcement
+- Added `scripts/load_test_rate_limit.py` for empirical 200/429 distribution checks under configurable concurrency.
 
 ### Documentation and Architecture
 
@@ -88,3 +89,4 @@ Major roadmap milestones were executed in code and documentation with validated 
 ## Remaining Work for Full Completion
 
 - Optional: add load/stress harness for empirical rate-limit behavior under concurrency.
+- Optional: persist load-test outputs as timestamped artifacts for trend comparison.

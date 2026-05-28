@@ -188,6 +188,12 @@ pytest -q
 - Evaluate retrieval quality: `python scripts/eval_retrieval.py --path . --glob "**/*.txt" --top-k 4`.
 - Query `/rag/query` and compare retrieval contexts against answer grounding.
 
+### Reliability Path
+
+- Run a simple rate-limit stress harness against `/rag/query`:
+  - `python scripts/load_test_rate_limit.py --base-url http://127.0.0.1:8080 --requests 80 --concurrency 20`
+- Review status counts (`status_200`, `status_429`) to verify throttling behavior.
+
 ## Production Operations
 
 - Configure `API_KEY` to enforce authenticated RAG endpoints.
