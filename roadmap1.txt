@@ -26,6 +26,8 @@ Completed today:
 	- API tests expanded for failure paths (query auth checks, metrics disabled, empty ingest).
 	- Provider health endpoint added: `/health/provider` with degraded status reporting for misconfigured providers.
 	- Added `scripts/load_test_rate_limit.py` to empirically measure 200/429 behavior under concurrency.
+	- Load-test harness now writes timestamped JSON artifacts for trend analysis.
+	- Added `scripts/summarize_load_tests.py` to compare recent reliability runs.
 - Milestone 6 partial completion:
 	- Added `docs/architecture.md` and `docs/research-extensions.md`.
 	- Added `docs/deployment-topologies.md`.
@@ -33,6 +35,7 @@ Completed today:
 	- Added `docs/release-checklist.md` with version/tag guidance.
 	- CI now includes a retrieval-baseline gate job using fixture probes.
 	- Added `scripts/run_completion_checks.py` for one-command sign-off validation.
+	- Added `docs/load-testing.md` with artifact-driven reliability workflow.
 
 Evidence captured today:
 - Test run: `12 passed in 14.22s`.

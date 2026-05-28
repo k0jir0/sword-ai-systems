@@ -199,6 +199,11 @@ pytest -q
 - Run a simple rate-limit stress harness against `/rag/query`:
   - `python scripts/load_test_rate_limit.py --base-url http://127.0.0.1:8080 --requests 80 --concurrency 20`
 - Review status counts (`status_200`, `status_429`) to verify throttling behavior.
+- Persist timestamped artifacts for trend comparisons:
+  - `python scripts/load_test_rate_limit.py --base-url http://127.0.0.1:8080 --requests 80 --concurrency 20 --label local_baseline`
+- Summarize historical load results:
+  - `python scripts/summarize_load_tests.py --results-dir data/load-testing-results --limit 10`
+- See detailed guidance in `docs/load-testing.md`.
 
 ## Production Operations
 

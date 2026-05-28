@@ -29,6 +29,8 @@ Use this checklist before tagging a Sword release.
 - [ ] `.env.example` reflects all required settings.
 - [ ] Auth and rate-limit behavior validated.
 - [ ] Metrics endpoint returns expected counters.
+- [ ] Load-test artifact generated in `data/load-testing-results/`.
+- [ ] Recent load-test trends reviewed with `scripts/summarize_load_tests.py`.
 
 ## 5. Versioning and Tagging Guidance
 
