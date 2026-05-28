@@ -87,6 +87,16 @@ uvicorn backend.app.main:app --host 127.0.0.1 --port 8080 --reload
 
 API docs will be at `http://127.0.0.1:8080/docs`.
 
+### Numbered CLI Launcher
+
+You can access common Sword actions from a numbered menu:
+
+```powershell
+python sword_cli.py
+```
+
+Menu options include starting/stopping the API, health checks, ingestion, querying, and completion checks.
+
 ### One-Command Validation (PowerShell)
 
 ```powershell

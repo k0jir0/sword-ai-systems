@@ -1,1 +1,45 @@
-Sword Progress Notes 1\nDate: 2026-05-28\n\nSummary\nToday focused on closing roadmap execution end-to-end and converting implementation progress into release-quality evidence. The project now has completed roadmap milestones, passing quality gates, and CI-backed sign-off documentation for the latest main commit.\n\n1. Roadmap Closure Work\n- Completed Milestone 7 sign-off path with explicit completion reporting.\n- Updated completion artifacts to move from in-progress language to complete status.\n- Added final release sign-off documentation in docs/release-signoff-2026-05-28.md.\n\n2. Reliability and Operations Progress\n- Added staged concurrency profile support to the load harness.\n  - scripts/load_test_rate_limit.py now supports multi-stage stress runs via --concurrency-profile.\n- Added load artifact dashboard output mode for trend visibility.\n  - scripts/summarize_load_tests.py supports markdown dashboard rendering with threshold status.\n- Added threshold gating for latest load artifact.\n  - scripts/check_load_thresholds.py validates p95 latency and throttled-rate bounds.\n\n3. Retrieval Quality Progress\n- Extended retrieval evaluation with labeled grounding probes.\n  - scripts/eval_retrieval.py now supports answer-fragment grounding recall and min-grounding-recall gates.\n- Added labeled probe fixture data.\n  - data/fixtures/grounding_probes.txt\n- Added regression coverage for the new evaluator behavior.\n\n4. CI and Packaging Hardening\n- Fixed CI import failures by including scripts in editable package installation.\n  - pyproject.toml updated to include scripts package.\n- Verified the latest final sign-off workflow is green with both jobs passing:\n  - test\n  - retrieval-baseline\n\n5. Validation Outcomes\n- Latest local completion validation includes:\n  - full test suite pass (22 tests)\n  - retrieval baseline gate pass\n- Latest GitHub Actions evidence run is successful:\n  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26586575795\n\nConclusion\nThe project moved from active roadmap execution to verifiable completion. The key improvement today was not only feature implementation, but conversion of those features into reproducible checks and signed-off evidence. This creates a stronger handoff state for release tagging, maintenance, and future extensions.\n
+Sword Progress Notes 1
+Date: 2026-05-28
+
+Overview
+Today focused on closing roadmap execution end-to-end and converting implementation work into release-quality evidence.
+Sword now has completed roadmap milestones, passing quality gates, and CI-backed sign-off documentation for the latest main commit.
+
+1. Roadmap Closure
+- Completed the Milestone 7 sign-off path with explicit completion reporting.
+- Updated completion artifacts from in-progress language to complete status.
+- Added final release sign-off documentation in docs/release-signoff-2026-05-28.md.
+
+2. Reliability and Operations
+- Added staged concurrency profile support to the load harness.
+	scripts/load_test_rate_limit.py now supports multi-stage stress runs via --concurrency-profile.
+- Added load artifact dashboard output mode for trend visibility.
+	scripts/summarize_load_tests.py now supports markdown dashboard rendering with threshold status.
+- Added threshold gating for the latest load artifact.
+	scripts/check_load_thresholds.py validates p95 latency and throttled-rate bounds.
+
+3. Retrieval Quality
+- Extended retrieval evaluation with labeled grounding probes.
+	scripts/eval_retrieval.py now supports answer-fragment grounding recall and min-grounding-recall gates.
+- Added labeled probe fixture data:
+	data/fixtures/grounding_probes.txt
+- Added regression coverage for the new evaluator behavior.
+
+4. CI and Packaging Hardening
+- Fixed CI import failures by including scripts in editable package installation.
+	pyproject.toml now includes the scripts package.
+- Verified final sign-off workflow with both jobs passing:
+	test
+	retrieval-baseline
+
+5. Validation Results
+- Local completion validation:
+	full test suite pass (22 tests)
+	retrieval baseline gate pass
+- GitHub Actions evidence run:
+	https://github.com/k0jir0/sword-ai-systems/actions/runs/26586575795
+
+Conclusion
+The project moved from active roadmap execution to verifiable completion.
+The key improvement was not only feature implementation, but turning those features into reproducible checks and signed-off evidence.
+This creates a stronger handoff state for release tagging, maintenance, and future extensions.
