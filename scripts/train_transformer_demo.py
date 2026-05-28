@@ -43,7 +43,7 @@ def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
     model = AutoModelForSequenceClassification.from_pretrained(args.model_name, num_labels=2)
 
-    dataset = load_dataset("imdb")
+    dataset = load_dataset("stanfordnlp/imdb")
     train_subset = dataset["train"].shuffle(seed=args.seed).select(range(args.train_samples))
     test_subset = dataset["test"].shuffle(seed=args.seed).select(range(args.test_samples))
 
@@ -62,7 +62,7 @@ def main() -> None:
         num_train_epochs=args.epochs,
         per_device_train_batch_size=args.train_batch_size,
         per_device_eval_batch_size=args.eval_batch_size,
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         logging_steps=50,
         learning_rate=args.learning_rate,
