@@ -1,11 +1,11 @@
-# Sword Completion Report (In Progress)
+# Sword Completion Report (Complete)
 
 Date: 2026-05-28
 Scope: Progress report against roadmap1.txt expectations.
 
 ## Summary
 
-Major roadmap milestones were executed in code and documentation with validated test results.
+Roadmap milestones are complete with passing local quality gates and a green CI run on the latest roadmap commit.
 
 ## Completed Work
 
@@ -76,7 +76,10 @@ Major roadmap milestones were executed in code and documentation with validated 
 
 ## Validation Evidence
 
-- Local test suite result: `12 passed in 14.22s`.
+- Local test suite result: `22 passed`.
+- Focused grounding benchmark result:
+  - `python scripts/eval_retrieval.py --path data/fixtures --glob core_expectations.txt --probe-file data/fixtures/grounding_probes.txt --top-k 2 --min-retrieval-recall 1.0 --min-keyword-recall 1.0 --min-grounding-recall 1.0`
+  - retrieval/keyword/grounding recall all passed at `1.00`.
 - Script smoke checks completed for:
   - MLP demo
   - ingestion with chunking
@@ -90,6 +93,9 @@ Major roadmap milestones were executed in code and documentation with validated 
 ## Current GitHub State
 
 - Recent roadmap commits pushed to `main`:
+  - `25bb236` Add labeled grounding retrieval probes
+  - `9371b80` Fix Sword package installation for CI
+  - `5600c5a` Add staged load stress profile
   - `9c4aa6c` Execute roadmap milestones: reproducibility, RAG quality, docs
   - `89e67b7` Add completion report and operations troubleshooting docs
   - `b07e9ff` Add retrieval quality gates and roadmap progress evidence
@@ -99,6 +105,8 @@ Major roadmap milestones were executed in code and documentation with validated 
   - `5e13efb` Add automated roadmap completion checks script
 
 - CI evidence:
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26585113108
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26584723039
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574505436
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574529888
   - https://github.com/k0jir0/sword-ai-systems/actions/runs/26574596649
@@ -108,4 +116,4 @@ Major roadmap milestones were executed in code and documentation with validated 
 
 ## Remaining Work for Full Completion
 
-No known roadmap gaps remain in the current implementation slice.
+No known roadmap gaps remain; completion criteria are satisfied.
