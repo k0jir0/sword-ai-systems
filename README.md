@@ -232,3 +232,18 @@ pytest -q
 - The default RAG provider is deterministic for reproducibility.
 - Switch to Ollama or OpenAI via `.env` without changing code.
 - API request responses include `generation_provider` for traceability.
+
+## Today's Progress (2026-05-28)
+
+- Roadmap execution reached complete status with Milestones 1-7 closed.
+- Final quality gates are passing:
+  - Local suite and completion checks pass (`22` tests passing in latest sign-off run).
+  - Retrieval baseline gate passes in CI and local completion checks.
+- Reliability and eval upgrades completed in this cycle:
+  - staged load stress profile support in `scripts/load_test_rate_limit.py`
+  - load trend dashboard output in `scripts/summarize_load_tests.py`
+  - load threshold gate in `scripts/check_load_thresholds.py`
+  - labeled grounding probes and grounding recall gate in `scripts/eval_retrieval.py`
+- CI sign-off evidence:
+  - https://github.com/k0jir0/sword-ai-systems/actions/runs/26586575795
+  - Includes green `test` and `retrieval-baseline` jobs on latest main.
